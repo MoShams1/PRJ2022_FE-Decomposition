@@ -62,13 +62,21 @@ def get_date():
             str(today.day).zfill(2))
 
 
-def opening_msg(win):
-    msg = f'In this experiment, your task is to maintain your gaze at the ' \
-          f'fixation cross and memorize the location of a single dot (in ' \
-          f'red or blue) or two dots (in red and blue) that flash.\n\n' \
-          f'After the mouse cursor appears, you have to click at the ' \
-          f'locations you memorized, while maintaining your fixation.\n\n' \
-          f'This session will last approximately 20 minutes.'
+def opening_msg(win, task_num):
+    if task_num == 1:
+        msg = f'In this experiment, your task is to maintain your gaze at ' \
+              f'the fixation cross and memorize the location of a single ' \
+              f'dot (in red or blue) or two dots (in red and blue) that ' \
+              f'flash.\n\n' \
+              f'After the mouse cursor appears, you have to click at the ' \
+              f'locations you memorized, while maintaining your ' \
+              f'fixation.\n\n' \
+              f'This session will last approximately 20 minutes.'
+    elif task_num == 2:
+        msg = f''
+    elif task_num == 3:
+        msg = f''
+
     inst_text = visual.TextStim(win, text=msg, color='white', height=.5,
                                 alignText='left')
     inst_text.pos = (0, 5)

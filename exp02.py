@@ -1,14 +1,13 @@
 """
-This script runs the first experiment (out of three) and is aimed for
+This script runs the second experiment (out of three) and is aimed for
 ECVP2022.
 Specifically, the goal here is to study the absolute perceived location of
-flashed probes in a bidirectional moving frame with two varaibles of interest:
+flashed probes in a unidirectional moving frame with two varaibles of interest:
     a. number of probes (one or two probes)
-    b. number of cycles (one, two, or three cycles)
 
 Mohammad Shams
 m.shams.ahmar@gmail.com
-2022-Jul-09
+2022-Jul-10
 """
 from psychopy import event
 import supplements as sup
@@ -27,7 +26,7 @@ n_trials = 1
 # destination file
 # -------------------------------------------------
 date = sup.get_date()
-file_name = f"Exp01_{date}_{person}_S{session}.csv"
+file_name = f"Exp02_{date}_{person}_S{session}.csv"
 data_path = os.path.join('Data', file_name)
 # -------------------------------------------------
 # initialize the display and set up task parameters
@@ -114,7 +113,7 @@ for itrial in range(n_trials):
     # -------------------------------------------------
     # run the stimulus
     # -------------------------------------------------
-    sup.opening_msg(win, task_num=1)
+    sup.opening_msg(win, task_num=2)
     # run fixation period
     for ifix in range(fix_dur):
         sup.draw_fixdot(win=win, size=FIX_SIZE, pos=(fix_x, fix_y))
