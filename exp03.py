@@ -23,7 +23,7 @@ import os
 # -------------------------------------------------
 person = 'MS'
 session = '01'  # use '00' for test sessions
-n_trials = 2  # rep x 4 conditions
+n_trials = 100  # rep x 60 conditions
 # -------------------------------------------------
 # destination file
 # -------------------------------------------------
@@ -47,7 +47,7 @@ fr_nstops = int(FR_PATH_DUR / MIN_OBJ_DUR)  # num stops along frame's path
 fr_xstart_list = [-11, -10, -9]  # deg
 fr_y_list = [-1, 0, 1]  # deg
 
-probe_size = .4  # radius in deg
+probe_size = .5  # radius in deg
 PROBE_COLOR = 'Tomato'
 
 FIX_SIZE = .7

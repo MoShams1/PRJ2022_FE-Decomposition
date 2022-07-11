@@ -47,7 +47,7 @@ def draw_frame(win, width, pos=(0, 0)):
     inner_frame.draw()
 
 
-def draw_probe(win, color, radius=.4, pos=(0, 0)):
+def draw_probe(win, color, radius=.5, pos=(0, 0)):
     probe = visual.Circle(win,
                           radius=radius,
                           fillColor=color,
@@ -106,3 +106,12 @@ def opening_msg(win, task_num):
     # show a blanck window for one second
     for iframe in range(60):
         win.flip()
+
+
+def label_cnd(cnd):
+    if cnd == 1:
+        return 'single1'
+    elif cnd == 2:
+        return 'single2'
+    else:
+        return 'double'
