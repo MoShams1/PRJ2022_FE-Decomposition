@@ -20,7 +20,7 @@ import os
 # insert session meta data
 # -------------------------------------------------
 person = 'MS'
-session = '01'  # use '00' for test sessions
+session = '02'  # use '00' for test sessions
 n_trials = 60  # 1 x 60
 # -------------------------------------------------
 # destination file
