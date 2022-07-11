@@ -22,7 +22,7 @@ import os
 # -------------------------------------------------
 person = 'MS'
 session = '01'  # use '00' for test sessions
-n_trials = 1
+n_trials = 5  # k x 6 conditions
 # -------------------------------------------------
 # destination file
 # -------------------------------------------------
@@ -59,6 +59,10 @@ gap_dur_list = list(range(18, 42 + 1, 6))  # frame (= 300,700,100 ms)
 CUR_OFFSET = 3  # cursor y offset in deg
 mpcc = 2  # mouse pointer correction coefficient (found impirically)
 mccc = 4  # mouse click correction coefficient (found impirically)
+# -------------------------------------------------
+# show the opening message window
+# -------------------------------------------------
+sup.opening_msg(win, task_num=1)
 # #################################################
 #                   TRIAL X
 # #################################################
@@ -78,7 +82,6 @@ for itrial in range(n_trials):
     # create the frame's pathway
     fr_xstart = random.choice(fr_xstart_list)
     fr_y = random.choice(fr_y_list)
-
     fr_stops_arr = np.linspace(fr_xstart, fr_xstart + FR_PATH_LEN, fr_nstops)
 
     # find the index and value of the midway of the frame's path
@@ -87,7 +90,7 @@ for itrial in range(n_trials):
     # randomly select the number of frame's cycle repetition
     n_cycles = random.choice(fr_repetition_list)
 
-    # extract where the flashes appear
+    # extract frame's mid way
     probe_x = fr_path_mid_val
     probe_y = fr_y
 
@@ -96,6 +99,13 @@ for itrial in range(n_trials):
 
     # randomly select color order of the proves
     random.shuffle(probe_color_list)
+    # prepare probe visibility for save
+    probe1_color = probe_color_list[0]
+    probe2_color = probe_color_list[1]
+    if cnd == 1:
+        probe2_color = None
+    elif cnd == 2:
+        probe1_color = None
 
     # randomly decide on fixation duration
     fix_dur = random.choice(fix_dur_list)
@@ -114,7 +124,6 @@ for itrial in range(n_trials):
     # -------------------------------------------------
     # run the stimulus
     # -------------------------------------------------
-    sup.opening_msg(win, task_num=1)
     # run fixation period
     for ifix in range(fix_dur):
         sup.draw_fixdot(win=win, size=FIX_SIZE, pos=(fix_x, fix_y))
@@ -154,12 +163,10 @@ for itrial in range(n_trials):
 
     # run response period
     mouse = event.Mouse(visible=True, newPos=[cur_x * mpcc, cur_y * mpcc])
-
     if cnd == 1 or cnd == 2:
         nclicks = 1
     else:
         nclicks = 2
-
     click_loc = np.full((2, 2), np.nan)
     for iclick in range(nclicks):
         while not mouse.getPressed()[0]:
@@ -176,8 +183,8 @@ for itrial in range(n_trials):
                   'probe_n': [nclicks],  # num of clicks = num of probes
                   'probe_size': [probe_size],
                   'probe_loc': [np.array([probe_x, probe_y])],
-                  'probe1_color': [probe_color_list[0]],
-                  'probe2_color': [probe_color_list[1]],
+                  'probe1_color': [probe1_color],
+                  'probe2_color': [probe2_color],
                   'click1_loc': [np.around(click_loc[0, :], 2)],
                   'click2_loc': [np.around(click_loc[1, :], 2)],
                   'frame_size': [FR_WIDTH],
