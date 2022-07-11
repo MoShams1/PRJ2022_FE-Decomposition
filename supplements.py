@@ -76,24 +76,23 @@ def opening_msg(win, task_num):
               f'flash.\n\n' \
               f'After the mouse cursor appears, you have to click at the ' \
               f'locations you memorized, while maintaining your ' \
-              f'fixation.\n\n' \
-              f'This experiment will last approximately 15 minutes.'
-    elif task_num == 3:
+              f'fixation.'
+    else:
         msg = f'In this experiment, your task is to maintain your gaze at ' \
               f'the fixation cross and memorize the location of a single ' \
               f'red dot flashes.\n\n' \
               f'After the mouse cursor appears, you have to click at the ' \
-              f'location you memorized, while maintaining your fixation.\n\n' \
-              f'This experiment will last approximately 30 minutes.'
+              f'location you memorized, while maintaining your fixation.'
 
     inst_text = visual.TextStim(win, text=msg, color='white', height=.5,
                                 alignText='left')
-    inst_text.pos = (0, 5)
+    inst_text.pos = (0, 2)
     inst_text.draw()
 
-    commands = '[Escape]: Quit\t\t[Space]: Begin'
-    cmnd_text = visual.TextStim(win, text=commands, color='white', height=.7)
-    cmnd_text.pos = (0, -4)
+    commands = '[Escape]: Cancel\t[Space]: OK'
+    cmnd_text = visual.TextStim(win, text=commands, color='white', height=.5,
+                                alignText='right')
+    cmnd_text.pos = (0, -2)
     cmnd_text.draw()
 
     win.flip()

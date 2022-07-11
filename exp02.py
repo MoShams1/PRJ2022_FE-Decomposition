@@ -21,7 +21,7 @@ import os
 # -------------------------------------------------
 person = 'MS'
 session = '01'  # use '00' for test sessions
-n_trials = 2  # rep x 4 conditions
+n_trials = 60  # 1 x 60
 # -------------------------------------------------
 # destination file
 # -------------------------------------------------
@@ -77,7 +77,7 @@ for itrial in range(n_trials):
     # cnd4: double
     cnd = random.choice([1, 2, 3, 4])
 
-    # create the frame's pathway
+    # create frame's pathway
     fr_xstart = random.choice(fr_xstart_list)
     fr_y = random.choice(fr_y_list)
     fr_stops_arr = np.linspace(fr_xstart, fr_xstart + FR_PATH_LEN, fr_nstops)

@@ -23,7 +23,7 @@ import os
 # -------------------------------------------------
 person = 'MS'
 session = '01'  # use '00' for test sessions
-n_trials = 100  # rep x 60 conditions
+n_trials = 100  # 3 x 100
 # -------------------------------------------------
 # destination file
 # -------------------------------------------------
@@ -72,16 +72,16 @@ for itrial in range(n_trials):
     # -------------------------------------------------
     # set up the stimulus behavior in current trial
     # -------------------------------------------------
-    # create the frame's pathway
+    # create frame's pathway
     fr_xstart = random.choice(fr_xstart_list)
     fr_y = random.choice(fr_y_list)
     fr_stops_arr = np.linspace(fr_xstart, fr_xstart + FR_PATH_LEN, fr_nstops)
 
     # randomly select the direction of frame's motion
     fr_dir = 'right'
-    if random.choice([False, True]):
-        fr_stops_arr = fr_stops_arr[::-1]
-        fr_dir = 'left'
+    # if random.choice([False, True]):
+    #     fr_stops_arr = fr_stops_arr[::-1]
+    #     fr_dir = 'left'
 
     # randomly select the frame size
     FR_WIDTH = random.choice(fr_width_arr)

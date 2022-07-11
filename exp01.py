@@ -22,7 +22,7 @@ import os
 # -------------------------------------------------
 person = 'MS'
 session = '01'  # use '00' for test sessions
-n_trials = 180  # k x 6 conditions
+n_trials = 90  # 2 x 90
 # -------------------------------------------------
 # destination file
 # -------------------------------------------------
@@ -79,10 +79,16 @@ for itrial in range(n_trials):
     # cnd4: double
     cnd = random.choice([1, 2, 3, 4])
 
-    # create the frame's pathway
+    # create frame's pathway
     fr_xstart = random.choice(fr_xstart_list)
     fr_y = random.choice(fr_y_list)
     fr_stops_arr = np.linspace(fr_xstart, fr_xstart + FR_PATH_LEN, fr_nstops)
+
+    # randomly select the direction of the frame's first leg
+    fr_dir = 'right'
+    if random.choice([False, True]):
+        fr_stops_arr = fr_stops_arr[::-1]
+        fr_dir = 'left'
 
     # find the index and value of the midway of the frame's path
     fr_path_mid_val = fr_stops_arr[int((fr_nstops - 1) / 2)]
@@ -197,6 +203,7 @@ for itrial in range(n_trials):
                   'frame_startloc': [np.array([fr_xstart, fr_y])],
                   'frame_nstops': [fr_nstops],
                   'frame_ncycles': [n_cycles],
+                  'frame_dir': [fr_dir],
                   'fixation_loc': [np.array([fix_x, fix_y])],
                   'fixation_dur': [fix_dur],
                   'gap1_dur': [gap1_dur],
