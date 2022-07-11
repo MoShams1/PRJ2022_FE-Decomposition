@@ -2,7 +2,7 @@
 This script runs the second experiment (out of three) and is aimed for
 ECVP2022.
 Specifically, the goal here is to study the absolute perceived location of
-flashed probes in a unidirectional moving frame with two varaibles of interest:
+flashed probes in a unidirectional moving frame with one varaible of interest:
     a. number of probes (one or two probes)
 
 Mohammad Shams
@@ -21,7 +21,7 @@ import os
 # -------------------------------------------------
 person = 'MS'
 session = '01'  # use '00' for test sessions
-n_trials = 1
+n_trials = 2  # rep x 4 conditions
 # -------------------------------------------------
 # destination file
 # -------------------------------------------------
@@ -33,7 +33,7 @@ data_path = os.path.join('Data', file_name)
 # -------------------------------------------------
 # configure the monitor and the stimulus window
 mon = sup.config_mon_imac24()
-win = sup.config_win(mon=mon, fullscr=False)
+win = sup.config_win(mon=mon, fullscr=True)
 
 REF_RATE = 60
 MIN_OBJ_DUR = 2  # frame
@@ -42,7 +42,6 @@ FR_WIDTH = 7.5  # deg
 FR_PATH_LEN = 6  # deg
 FR_PATH_DUR = 26  # frame
 fr_nstops = int(FR_PATH_DUR / MIN_OBJ_DUR)  # num stops along frame's path
-fr_repetition_list = [1, 2, 3]  # number of repeated cycles
 fr_xstart_list = [-4, -3, -2]  # deg
 fr_y_list = [-1, 0, 1]  # deg
 
@@ -58,6 +57,10 @@ gap_dur_list = list(range(18, 42 + 1, 6))  # frame (= 300,700,100 ms)
 CUR_OFFSET = 3  # cursor y offset in deg
 mpcc = 2  # mouse pointer correction coefficient (found impirically)
 mccc = 4  # mouse click correction coefficient (found impirically)
+# -------------------------------------------------
+# show the opening message window
+# -------------------------------------------------
+sup.opening_msg(win, task_num=2)
 # #################################################
 #                   TRIAL X
 # #################################################
@@ -77,16 +80,18 @@ for itrial in range(n_trials):
     # create the frame's pathway
     fr_xstart = random.choice(fr_xstart_list)
     fr_y = random.choice(fr_y_list)
-
     fr_stops_arr = np.linspace(fr_xstart, fr_xstart + FR_PATH_LEN, fr_nstops)
+
+    # randomly select the direction of frame's motion
+    fr_dir = 'right'
+    if random.choice([False, True]):
+        fr_stops_arr = fr_stops_arr[::-1]
+        fr_dir = 'left'
 
     # find the index and value of the midway of the frame's path
     fr_path_mid_val = fr_stops_arr[int((fr_nstops - 1) / 2)]
 
-    # randomly select the number of frame's cycle repetition
-    n_cycles = random.choice(fr_repetition_list)
-
-    # extract where the flashes appear
+    # extract probe's location
     probe_x = fr_path_mid_val
     probe_y = fr_y
 
@@ -95,6 +100,13 @@ for itrial in range(n_trials):
 
     # randomly select color order of the proves
     random.shuffle(probe_color_list)
+    # prepare probe visibility for save
+    probe1_color = probe_color_list[0]
+    probe2_color = probe_color_list[1]
+    if cnd == 1:
+        probe2_color = None
+    elif cnd == 2:
+        probe1_color = None
 
     # randomly decide on fixation duration
     fix_dur = random.choice(fix_dur_list)
@@ -113,7 +125,6 @@ for itrial in range(n_trials):
     # -------------------------------------------------
     # run the stimulus
     # -------------------------------------------------
-    sup.opening_msg(win, task_num=2)
     # run fixation period
     for ifix in range(fix_dur):
         sup.draw_fixdot(win=win, size=FIX_SIZE, pos=(fix_x, fix_y))
@@ -123,30 +134,25 @@ for itrial in range(n_trials):
     for igap in range(gap1_dur):
         win.flip()
 
-    for icyc in range(n_cycles):
-        for ileg in range(2):
-            # move the frame and flash one probe at the end of its path
-            for xind, xval in enumerate(fr_stops_arr[0:-1]):
-                for irep in range(MIN_OBJ_DUR):
-                    sup.draw_frame(win, pos=(xval, fr_y),
-                                   width=FR_WIDTH)
-                    # determine the behavior of probes in each leg of the cycle
-                    if cnd == 2 and ileg == 1 - 1:
-                        flash = False
-                    elif cnd == 1 and ileg == 2 - 1:
-                        flash = False
-                    else:
-                        flash = True
-                    # flash probe
-                    if xind == 0 and flash:
-                        sup.draw_probe(win, pos=(probe_x, probe_y),
-                                       radius=probe_size,
-                                       color=probe_color_list[ileg])
-                    win.flip()
-                    sup.escape_session()  # force exit with 'escape' button
-                    # core.wait(.1)  # slow down for debugging purposes
-            # reverse the frame's path
-            fr_stops_arr = fr_stops_arr[::-1]
+    # move the frame and flash the probes
+    for xind, xval in enumerate(fr_stops_arr):
+        for irep in range(MIN_OBJ_DUR):
+            sup.draw_frame(win, pos=(xval, fr_y),
+                           width=FR_WIDTH)
+            # flash probe1
+            if xind == 0 and cnd != 2:
+                sup.draw_probe(win, pos=(probe_x, probe_y),
+                               radius=probe_size,
+                               color=probe_color_list[0])
+            # flash probe2
+            elif xind == fr_nstops - 1 and cnd != 1:
+                sup.draw_probe(win, pos=(probe_x, probe_y),
+                               radius=probe_size,
+                               color=probe_color_list[1])
+            win.flip()
+            sup.escape_session()  # force exit with 'escape' button
+            # core.wait(.1)  # slow down for debugging purposes
+
     # run gap period
     for igap in range(gap2_dur):
         win.flip()
@@ -175,20 +181,20 @@ for itrial in range(n_trials):
                   'probe_n': [nclicks],  # num of clicks = num of probes
                   'probe_size': [probe_size],
                   'probe_loc': [np.array([probe_x, probe_y])],
-                  'probe1_color': [probe_color_list[0]],
-                  'probe2_color': [probe_color_list[1]],
+                  'probe1_color': [probe1_color],
+                  'probe2_color': [probe2_color],
                   'click1_loc': [np.around(click_loc[0, :], 2)],
                   'click2_loc': [np.around(click_loc[1, :], 2)],
                   'frame_size': [FR_WIDTH],
                   'frame_dur': [FR_PATH_DUR],
+                  'frame_len': [FR_PATH_LEN],
                   'frame_startloc': [np.array([fr_xstart, fr_y])],
                   'frame_nstops': [fr_nstops],
-                  'frame_ncycles': [n_cycles],
+                  'frame_dir': [fr_dir],
                   'fixation_loc': [np.array([fix_x, fix_y])],
                   'fixation_dur': [fix_dur],
                   'gap1_dur': [gap1_dur],
                   'gap2_dur': [gap2_dur]}
-    print(trial_dict)
     # convert to data frame
     dfnew = pd.DataFrame(trial_dict)
     # if first trial create a file, else load and add the new data frame
@@ -196,5 +202,5 @@ for itrial in range(n_trials):
         dfnew.to_csv(data_path, index=False)
     else:
         df = pd.read_csv(data_path)
-        dfnew = pd.concat([df, dfnew], ignore_index=True)
+        dfnew = pd.concat([df, dfnew])
         dfnew.to_csv(data_path, index=False)
