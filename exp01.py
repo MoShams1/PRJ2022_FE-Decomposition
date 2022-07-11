@@ -22,7 +22,7 @@ import os
 # -------------------------------------------------
 person = 'MS'
 session = '01'  # use '00' for test sessions
-n_trials = 5  # k x 6 conditions
+n_trials = 3  # k x 6 conditions
 # -------------------------------------------------
 # destination file
 # -------------------------------------------------
@@ -34,7 +34,7 @@ data_path = os.path.join('Data', file_name)
 # -------------------------------------------------
 # configure the monitor and the stimulus window
 mon = sup.config_mon_imac24()
-win = sup.config_win(mon=mon, fullscr=False)
+win = sup.config_win(mon=mon, fullscr=True)
 
 REF_RATE = 60
 MIN_OBJ_DUR = 2  # frame
@@ -90,7 +90,7 @@ for itrial in range(n_trials):
     # randomly select the number of frame's cycle repetition
     n_cycles = random.choice(fr_repetition_list)
 
-    # extract frame's mid way
+    # extract probe's location
     probe_x = fr_path_mid_val
     probe_y = fr_y
 
@@ -189,6 +189,7 @@ for itrial in range(n_trials):
                   'click2_loc': [np.around(click_loc[1, :], 2)],
                   'frame_size': [FR_WIDTH],
                   'frame_dur': [FR_PATH_DUR],
+                  'frame_len': [FR_PATH_LEN],
                   'frame_startloc': [np.array([fr_xstart, fr_y])],
                   'frame_nstops': [fr_nstops],
                   'frame_ncycles': [n_cycles],
@@ -196,7 +197,6 @@ for itrial in range(n_trials):
                   'fixation_dur': [fix_dur],
                   'gap1_dur': [gap1_dur],
                   'gap2_dur': [gap2_dur]}
-    print(trial_dict)
     # convert to data frame
     dfnew = pd.DataFrame(trial_dict)
     # if first trial create a file, else load and add the new data frame
@@ -204,5 +204,5 @@ for itrial in range(n_trials):
         dfnew.to_csv(data_path, index=False)
     else:
         df = pd.read_csv(data_path)
-        dfnew = pd.concat([df, dfnew], ignore_index=True)
+        dfnew = pd.concat([df, dfnew])
         dfnew.to_csv(data_path, index=False)
