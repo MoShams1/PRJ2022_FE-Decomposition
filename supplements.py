@@ -29,12 +29,18 @@ def draw_fixdot(win, size, pos):
 
 
 def draw_frame(win, width, pos=(0, 0)):
+    if width == 7.5:
+        line_width = 0.3
+    elif width == 5:
+        line_width = 0.2
+    else:
+        line_width = 0.1
     outer_frame = visual.Rect(win=win,
                               size=width,
                               fillColor='white',
                               pos=pos)
     inner_frame = visual.Rect(win=win,
-                              size=width - .3,
+                              size=width - line_width,
                               fillColor=[-.8, -.8, -.8],
                               pos=pos)
     outer_frame.draw()
@@ -63,7 +69,7 @@ def get_date():
 
 
 def opening_msg(win, task_num):
-    if task_num == 1:
+    if task_num == 1 or task_num == 2:
         msg = f'In this experiment, your task is to maintain your gaze at ' \
               f'the fixation cross and memorize the location of a single ' \
               f'dot (in red or blue) or two dots (in red and blue) that ' \
@@ -71,19 +77,22 @@ def opening_msg(win, task_num):
               f'After the mouse cursor appears, you have to click at the ' \
               f'locations you memorized, while maintaining your ' \
               f'fixation.\n\n' \
-              f'This session will last approximately 20 minutes.'
-    elif task_num == 2:
-        msg = f''
+              f'This experiment will last approximately 15 minutes.'
     elif task_num == 3:
-        msg = f''
+        msg = f'In this experiment, your task is to maintain your gaze at ' \
+              f'the fixation cross and memorize the location of a single ' \
+              f'red dot flashes.\n\n' \
+              f'After the mouse cursor appears, you have to click at the ' \
+              f'location you memorized, while maintaining your fixation.\n\n' \
+              f'This experiment will last approximately 30 minutes.'
 
     inst_text = visual.TextStim(win, text=msg, color='white', height=.5,
                                 alignText='left')
     inst_text.pos = (0, 5)
     inst_text.draw()
 
-    msg = '[Space]: Begin\t\t[Escape]: Quit'
-    cmnd_text = visual.TextStim(win, text=msg, color='white', height=.7)
+    commands = '[Escape]: Quit\t\t[Space]: Begin'
+    cmnd_text = visual.TextStim(win, text=commands, color='white', height=.7)
     cmnd_text.pos = (0, -4)
     cmnd_text.draw()
 
