@@ -45,7 +45,7 @@ fr_nstops = int(FR_PATH_DUR / MIN_OBJ_DUR)  # num stops along frame's path
 fr_xstart_list = [-4, -3, -2]  # deg
 fr_y_list = [-1, 0, 1]  # deg
 
-probe_size = .4  # radius in deg
+probe_size = .5  # radius in deg
 probe_color_list = ['DodgerBlue', 'Tomato']
 
 FIX_SIZE = .7
@@ -173,11 +173,15 @@ for itrial in range(n_trials):
         while mouse.getPressed()[0]:
             pass
         click_loc[iclick, :] = mouse.getPos() / mccc
+
+    # prepare condition label for saving
+    cnd_label = sup.label_cnd(cnd)
     # -------------------------------------------------
     # create data frame and save
     # -------------------------------------------------
     # create a dictionary
     trial_dict = {'trial_num': [itrial + 1],
+                  'cnd': [cnd_label],
                   'probe_n': [nclicks],  # num of clicks = num of probes
                   'probe_size': [probe_size],
                   'probe_loc': [np.array([probe_x, probe_y])],

@@ -10,7 +10,7 @@ Mohammad Shams
 m.shams.ahmar@gmail.com
 2022-Jul-09
 """
-from psychopy import event
+from psychopy import event, core
 import supplements as sup
 import pandas as pd
 import numpy as np
@@ -22,7 +22,7 @@ import os
 # -------------------------------------------------
 person = 'MS'
 session = '01'  # use '00' for test sessions
-n_trials = 3  # k x 6 conditions
+n_trials = 180  # k x 6 conditions
 # -------------------------------------------------
 # destination file
 # -------------------------------------------------
@@ -47,7 +47,7 @@ fr_repetition_list = [1, 2, 3]  # number of repeated cycles
 fr_xstart_list = [-4, -3, -2]  # deg
 fr_y_list = [-1, 0, 1]  # deg
 
-probe_size = .4  # radius in deg
+probe_size = .5  # radius in deg
 probe_color_list = ['DodgerBlue', 'Tomato']
 
 FIX_SIZE = .7
@@ -154,7 +154,7 @@ for itrial in range(n_trials):
                                        color=probe_color_list[ileg])
                     win.flip()
                     sup.escape_session()  # force exit with 'escape' button
-                    # core.wait(.1)  # slow down for debugging purposes
+                    # core.wait(.2)  # slow down for debugging purposes
             # reverse the frame's path
             fr_stops_arr = fr_stops_arr[::-1]
     # run gap period
@@ -175,11 +175,15 @@ for itrial in range(n_trials):
         while mouse.getPressed()[0]:
             pass
         click_loc[iclick, :] = mouse.getPos() / mccc
+
+    # prepare condition label for saving
+    cnd_label = sup.label_cnd(cnd)
     # -------------------------------------------------
     # create data frame and save
     # -------------------------------------------------
     # create a dictionary
     trial_dict = {'trial_num': [itrial + 1],
+                  'cnd': [cnd_label],
                   'probe_n': [nclicks],  # num of clicks = num of probes
                   'probe_size': [probe_size],
                   'probe_loc': [np.array([probe_x, probe_y])],
