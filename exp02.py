@@ -20,7 +20,7 @@ import os
 # insert session meta data
 # -------------------------------------------------
 person = 'MS'
-session = '02'  # use '00' for test sessions
+session = '01'  # use '00' for test sessions
 n_trials = 60  # 1 x 60
 # -------------------------------------------------
 # destination file
@@ -182,7 +182,6 @@ for itrial in range(n_trials):
     # create a dictionary
     trial_dict = {'trial_num': [itrial + 1],
                   'cnd': [cnd_label],
-                  'probe_n': [nclicks],  # num of clicks = num of probes
                   'probe_size': [probe_size],
                   'probe_loc': [np.array([probe_x, probe_y])],
                   'probe1_color': [probe1_color],
