@@ -48,11 +48,17 @@ def draw_frame(win, width, pos=(0, 0)):
 
 
 def draw_probe(win, color, radius=.5, pos=(0, 0)):
-    probe = visual.Circle(win,
-                          radius=radius,
-                          fillColor=color,
-                          pos=pos)
-    probe.draw()
+    line_width = .1
+    outer_probe = visual.Circle(win,
+                                radius=radius + line_width,
+                                fillColor=[-.8, -.8, -.8],
+                                pos=pos)
+    inner_probe = visual.Circle(win,
+                                radius=radius,
+                                fillColor=color,
+                                pos=pos)
+    outer_probe.draw()
+    inner_probe.draw()
 
 
 def escape_session():
