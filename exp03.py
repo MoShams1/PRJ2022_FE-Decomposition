@@ -22,7 +22,7 @@ import os
 # insert session meta data
 # -------------------------------------------------
 person = 'MS'
-session = '01'  # use '00' for test sessions
+session = '02'  # use '00' for test sessions
 n_trials = 100  # 3 x 100
 # -------------------------------------------------
 # destination file
@@ -131,7 +131,8 @@ for itrial in range(n_trials):
             if xval == fr_flashloc:
                 sup.draw_probe(win, pos=(probe_x, probe_y),
                                radius=probe_size,
-                               color=PROBE_COLOR)
+                               color=PROBE_COLOR,
+                               edge_width=.1)
             win.flip()
             sup.escape_session()  # force exit with 'escape' button
             # core.wait(.1)  # slow down for debugging purposes
