@@ -34,7 +34,7 @@ def draw_frame(win, width, pos=(0, 0)):
     elif width == 5:
         line_width = 0.2
     else:
-        line_width = 0.1
+        line_width = 0.05
     outer_frame = visual.Rect(win=win,
                               size=width,
                               fillColor='white',

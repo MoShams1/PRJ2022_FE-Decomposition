@@ -35,12 +35,12 @@ data_path = os.path.join('Data', file_name)
 # -------------------------------------------------
 # configure the monitor and the stimulus window
 mon = sup.config_mon_imac24()
-win = sup.config_win(mon=mon, fullscr=False)
+win = sup.config_win(mon=mon, fullscr=True)
 
 REF_RATE = 60
 MIN_OBJ_DUR = 2  # frame
 
-fr_width_arr = [1, 5, 7.5]  # deg
+fr_width_arr = [.5, 5, 7.5]  # deg
 FR_PATH_LEN = 20  # deg
 FR_PATH_DUR = 86  # frame
 fr_nstops = int(FR_PATH_DUR / MIN_OBJ_DUR)  # num stops along frame's path
@@ -152,7 +152,6 @@ for itrial in range(n_trials):
     # -------------------------------------------------
     # create data frame and save
     # -------------------------------------------------
-    print(fr_flashloc)
     # create a dictionary
     trial_dict = {'trial_num': [itrial + 1],
                   'probe_size': [probe_size],
