@@ -47,10 +47,9 @@ def draw_frame(win, width, pos=(0, 0)):
     inner_frame.draw()
 
 
-def draw_probe(win, color, radius=.5, pos=(0, 0)):
-    line_width = .1
+def draw_probe(win, color, radius=.5, pos=(0, 0), edge_width=0):
     outer_probe = visual.Circle(win,
-                                radius=radius + line_width,
+                                radius=radius + edge_width,
                                 fillColor=[-.8, -.8, -.8],
                                 pos=pos)
     inner_probe = visual.Circle(win,
