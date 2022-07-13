@@ -20,14 +20,14 @@ import os
 # -------------------------------------------------
 # insert session meta data
 # -------------------------------------------------
-person = 'MS'
-session = '02'  # use '00' for test sessions
-n_trials = 90  # 2 x 90
+person = 'TEST'
+session = '01'  # use '00' for test sessions
+n_trials = 3  # 2 x 90
 # -------------------------------------------------
 # destination file
 # -------------------------------------------------
 date = sup.get_date()
-file_name = f"Exp01_{date}_{person}_S{session}.csv"
+file_name = f"Exp01_{date}_{person}_S{session}.json"
 data_path = os.path.join('Data', file_name)
 # -------------------------------------------------
 # initialize the display and set up task parameters
@@ -189,30 +189,37 @@ for itrial in range(n_trials):
     # -------------------------------------------------
     # create a dictionary
     trial_dict = {'trial_num': [itrial + 1],
+                  'exp': [1],
                   'cnd': [cnd_label],
                   'probe_size': [probe_size],
-                  'probe_loc': [np.array([probe_x, probe_y])],
+                  'probe_xloc': [probe_x],
+                  'probe_yloc': [probe_y],
                   'probe1_color': [probe1_color],
                   'probe2_color': [probe2_color],
-                  'click1_loc': [np.around(click_loc[0, :], 2)],
-                  'click2_loc': [np.around(click_loc[1, :], 2)],
+                  'click1_xloc': [round(click_loc[0, 0], 2)],
+                  'click1_yloc': [round(click_loc[0, 1], 2)],
+                  'click2_xloc': [round(click_loc[1, 0], 2)],
+                  'click2_yloc': [round(click_loc[1, 1], 2)],
                   'frame_size': [FR_WIDTH],
                   'frame_dur': [FR_PATH_DUR],
                   'frame_len': [FR_PATH_LEN],
-                  'frame_startloc': [np.array([fr_xstart, fr_y])],
+                  'frame_startxloc': [fr_xstart],
+                  'frame_startyloc': [fr_y],
                   'frame_nstops': [fr_nstops],
                   'frame_ncycles': [n_cycles],
                   'frame_dir': [fr_dir],
-                  'fixation_loc': [np.array([fix_x, fix_y])],
+                  'fixation_xloc': [fix_x],
+                  'fixation_yloc': [fix_y],
                   'fixation_dur': [fix_dur],
                   'gap1_dur': [gap1_dur],
                   'gap2_dur': [gap2_dur]}
     # convert to data frame
     dfnew = pd.DataFrame(trial_dict)
+
     # if first trial create a file, else load and add the new data frame
     if itrial == 0:
-        dfnew.to_csv(data_path, index=False)
+        dfnew.to_json(data_path)
     else:
-        df = pd.read_csv(data_path)
-        dfnew = pd.concat([df, dfnew])
-        dfnew.to_csv(data_path, index=False)
+        df = pd.read_json(data_path)
+        dfnew = pd.concat([df, dfnew], ignore_index=True)
+        dfnew.to_json(data_path)

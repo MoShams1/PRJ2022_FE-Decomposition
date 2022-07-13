@@ -90,7 +90,8 @@ def opening_msg(win, task_num):
               f'red dot flashes.\n\n' \
               f'After the mouse cursor appears, you have to click at the ' \
               f'location you memorized, while maintaining your fixation.\n\n' \
-              f'You can quit the experiment any time by pressing the Escape ' \
+              f'You can abort the experiment any time by pressing the ' \
+              f'Escape ' \
               f'button.'
 
     inst_text = visual.TextStim(win, text=msg, color='white', height=.5,
