@@ -90,7 +90,7 @@ for itrial in range(n_trials):
     fr_path_mid_val = fr_stops_arr[int((fr_nstops - 1) / 2)]
 
     # randomly select when the probe flashes
-    fr_flashloc = random.choice(fr_stops_arr)
+    fr_flashxloc = random.choice(fr_stops_arr)
 
     # extract probe's location
     probe_x = fr_path_mid_val
@@ -128,7 +128,7 @@ for itrial in range(n_trials):
             sup.draw_frame(win, pos=(xval, fr_y),
                            width=FR_WIDTH)
             # flash probe
-            if xval == fr_flashloc:
+            if xval == fr_flashxloc:
                 sup.draw_probe(win, pos=(probe_x, probe_y),
                                radius=probe_size,
                                color=PROBE_COLOR,
@@ -174,6 +174,7 @@ for itrial in range(n_trials):
                   'frame_nstops': [fr_nstops],
                   'frame_ncycles': [None],
                   'frame_dir': [fr_dir],
+                  'frame_flashxloc': [fr_flashxloc],
                   'fixation_xloc': [fix_x],
                   'fixation_yloc': [fix_y],
                   'fixation_dur': [fix_dur],
