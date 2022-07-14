@@ -198,7 +198,6 @@ for itrial in range(n_trials):
                   'frame_startxloc': [fr_xstart],
                   'frame_startyloc': [fr_y],
                   'frame_nstops': [fr_nstops],
-                  'frame_ncycles': [None],
                   'frame_dir': [fr_dir],
                   'fixation_xloc': [fix_x],
                   'fixation_yloc': [fix_y],
