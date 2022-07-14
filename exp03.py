@@ -22,8 +22,8 @@ import os
 # insert session meta data
 # -------------------------------------------------
 person = 'MS'
-session = '03'  # use '00' for test sessions
-n_trials = 3  # 3 x 100
+session = '03'
+n_trials = 180  # 20 x 3
 # -------------------------------------------------
 # destination file
 # -------------------------------------------------
