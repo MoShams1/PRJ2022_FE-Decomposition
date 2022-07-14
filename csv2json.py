@@ -1,49 +1,67 @@
 import pandas as pd
 import numpy as np
 
-path = 'Data/Exp01_20220711_MS_S01.csv'
+file_name = 'Data/Exp03_20220711_MS_S01'
+path = file_name + '.csv'
 df = pd.read_csv(path)
 
+
+def split_array(x, col, typ):
+    return np.array([i[1:-1].split()[x] for i in df[col]], dtype=typ)
+
+
 trial_num = np.array(df['trial_num'], dtype=int)
-cnd = list(df['cnd'])
+exp = np.full(np.shape(trial_num), 1)
+# cnd = list(df['cnd'])
 probe_size = np.array(df['probe_size'], dtype=float)
+probe_xloc = split_array(0, 'probe_loc', float)
+probe_yloc = split_array(1, 'probe_loc', float)
+# probe1_color = list(df['probe1_color'])
+# probe2_color = list(df['probe2_color'])
+click1_xloc = split_array(0, 'click_loc', float)
+click1_yloc = split_array(1, 'click_loc', float)
+# click2_xloc = split_array(0, 'click2_loc', float)
+# click2_yloc = split_array(1, 'click2_loc', float)
+frame_size = np.array(df['frame_size'], dtype=float)
+frame_dur = np.array(df['frame_dur'], dtype=int)
+frame_len = np.array(df['frame_len'], dtype=int)
+frame_startxloc = split_array(0, 'frame_startloc', float)
+frame_startyloc = split_array(1, 'frame_startloc', float)
+frame_nstops = np.array(df['frame_nstops'], dtype=int)
+# frame_ncycles = np.array(df['frame_ncycles'], dtype=int)
+frame_dir = list(df['frame_dir'])
+frame_flashloc = list(df['frame_flashloc'])
+fixation_xloc = split_array(0, 'fixation_loc', float)
+fixation_yloc = split_array(1, 'fixation_loc', float)
+fixation_dur = np.array(df['fixation_dur'], dtype=int)
+gap1_dur = np.array(df['gap1_dur'], dtype=int)
+gap2_dur = np.array(df['gap2_dur'], dtype=int)
 
-# temp = np.array(df['probe_loc'])
-# probe_loc = [np.asfarray(i, float) for i in df['probe_loc']]
-probe_loc = np.asfarray(probe_size[0, :], float)
-
-# print(type(probe_loc))
-print(probe_loc)
-# print(probe_loc[0])
-# print(np.array(df.loc[1, 'probe_loc']))
-
-# print(probe_loc[0] + probe_loc[1])
-
-# mydic = {'trial_num': trial_num,
-#          'cnd': cnd,
-#          'probe_size': probe_size}
-# mydf = pd.DataFrame(mydic)
-# print(mydf)
-
-# trial_num = list(df['cnd'])
-'''
-trial_dict = {'trial_num': [itrial + 1],
-              'cnd': [cnd_label],
-              'probe_size': [probe_size],
-              'probe_loc': [np.array([probe_x, probe_y])],
-              'probe1_color': [probe1_color],
-              'probe2_color': [probe2_color],
-              'click1_loc': [np.around(click_loc[0, :], 2)],
-              'click2_loc': [np.around(click_loc[1, :], 2)],
-              'frame_size': [FR_WIDTH],
-              'frame_dur': [FR_PATH_DUR],
-              'frame_len': [FR_PATH_LEN],
-              'frame_startloc': [np.array([fr_xstart, fr_y])],
-              'frame_nstops': [fr_nstops],
-              'frame_ncycles': [n_cycles],
-              'frame_dir': [fr_dir],
-              'fixation_loc': [np.array([fix_x, fix_y])],
-              'fixation_dur': [fix_dur],
-              'gap1_dur': [gap1_dur],
-              'gap2_dur': [gap2_dur]}
-'''
+mydict = {'trial_num': trial_num,
+          'exp': exp,
+          # 'cnd': cnd,
+          'probe_size': probe_size,
+          'probe_xloc': probe_xloc,
+          'probe_yloc': probe_yloc,
+          # 'probe1_color': probe1_color,
+          # 'probe2_color': probe2_color,
+          'click1_xloc': click1_xloc,
+          'click1_yloc': click1_yloc,
+          # 'click2_xloc': click2_xloc,
+          # 'click2_yloc': click2_yloc,
+          'frame_size': frame_size,
+          'frame_dur': frame_dur,
+          'frame_len': frame_len,
+          'frame_startxloc': frame_startxloc,
+          'frame_startyloc': frame_startyloc,
+          'frame_nstops': frame_nstops,
+          # 'frame_ncycles': frame_ncycles,
+          'frame_dir': frame_dir,
+          'frame_flashloc': frame_flashloc,
+          'fixation_xloc': fixation_xloc,
+          'fixation_yloc': fixation_yloc,
+          'fixation_dur': fixation_dur,
+          'gap1_dur': gap1_dur,
+          'gap2_dur': gap2_dur}
+mydf = pd.DataFrame(mydict)
+mydf.to_json(file_name + '.json')
