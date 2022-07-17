@@ -21,15 +21,15 @@ import os
 # -------------------------------------------------
 # insert session meta data
 # -------------------------------------------------
-person = 'MS'
-session = '03'
-n_trials = 180  # 20 x 3
+person = 'AR'
+session = '02'
+n_trials = 90  # 20 x 3
 # -------------------------------------------------
 # destination file
 # -------------------------------------------------
 date = sup.get_date()
 file_name = f"Exp03_{date}_{person}_S{session}.json"
-data_path = os.path.join('Data', file_name)
+data_path = os.path.join('Data/RawData', file_name)
 # -------------------------------------------------
 # initialize the display and set up task parameters
 # -------------------------------------------------
