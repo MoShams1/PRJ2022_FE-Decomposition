@@ -1,3 +1,19 @@
+"""
+Analyzing Exp. 01/02: mislocalization size as a measure of probe condition (
+norm.)
+
+This creates two figures:
+    fig. 1: the distribution of normalized click errors of individual subjects
+    across three conditions: double probes, first single probe, second
+    single probe.
+    fig. 2: the across-subject average normalized click error in each of the
+    three conditions above.
+
+The normalization was done by dividing the absolute click errors of a
+subject in all the three conditions by the average of the errors in the
+three conditions.
+"""
+
 import pandas as pd
 import numpy as np
 import os
@@ -10,7 +26,7 @@ def find_target_files(path_name, exp_name):
 
 
 path = 'Data/CleanData'
-exp = 'Exp01'
+exp = 'Exp02'
 files = find_target_files(path, exp)
 
 num_sub = 5
@@ -45,7 +61,7 @@ for i, file in enumerate(files):
     probe = df.loc[msk_single2, 'probe_xloc']
     dist_single2 = abs(click - probe)
 
-    # calculate the zscore of all the errors
+    # normalize the errors within each subject
     errors = pd.concat([dist_double, dist_single1, dist_single2])
     dist_double = dist_double / errors.mean()
     dist_single1 = dist_single1 / errors.mean()
@@ -74,8 +90,8 @@ fig2, axs2 = plt.subplots(figsize=(5, 6))
 x = [1, 2, 3]
 data = np.hstack([all_double, all_single1, all_single2])
 y = np.mean(data, axis=0)
-# yerr = np.std(data, axis=0) / (num_sub ** 0.5)
-yerr = np.std(data, axis=0)
+yerr = np.std(data, axis=0) / (num_sub ** 0.5)
+# yerr = np.std(data, axis=0)
 axs2.bar(x, y)
 axs2.errorbar(x, y, yerr=yerr, fmt='none', ecolor='black')
 axs2.set_xticks(x)
