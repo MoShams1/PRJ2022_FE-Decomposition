@@ -1,3 +1,14 @@
+"""
+Analyzing Exp. 01/02: mislocalization size as a measure of probe condition
+
+This creates two figures:
+    fig. 1: the distribution of absoluute click errors of individual subjects
+    across three conditions: double probes, first single probe, second
+    single probe.
+    fig. 2: the across-subject average click error in each of the three
+    conditions above.
+"""
+
 import pandas as pd
 import numpy as np
 import os
@@ -10,7 +21,7 @@ def find_target_files(path_name, exp_name):
 
 
 path = 'Data/CleanData'
-exp = 'Exp01'
+exp = 'Exp02'
 files = find_target_files(path, exp)
 
 num_sub = 5
@@ -59,8 +70,8 @@ for i, file in enumerate(files):
     axs1[2, i].set_ylabel('count')
 
     all_double[i] = dist_double.mean()
-    all_single2[i] = dist_single2.mean()
     all_single1[i] = dist_single1.mean()
+    all_single2[i] = dist_single2.mean()
 
 # plot across subject figures
 fig2, axs2 = plt.subplots(figsize=(5, 6))
