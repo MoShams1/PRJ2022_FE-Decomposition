@@ -12,7 +12,7 @@ def find_target_files(path_name, exp_name):
     return [f for f in all_files if exp_name in f]
 
 
-path = 'Data/CleanData'
+path = 'Data'
 exp = 'Exp02'
 files = find_target_files(path, exp)
 num_sub = 5
@@ -21,7 +21,7 @@ num_sub = 5
 normalize = False
 
 plt.style.use('seaborn')
-sup.init_figure()
+# sup.init_figure()
 
 all_double1 = np.full((num_sub, 1), np.nan)
 all_double2 = np.full((num_sub, 1), np.nan)
@@ -42,7 +42,7 @@ for i, file in enumerate(files):
     probe = df.loc[msk_double, 'probe_xloc']
     doubleA = click1 - probe
     doubleB = click2 - probe
-    # flipt the sign of click errors in the leftward motion
+    # flip the sign of click errors in the leftward motion
     doubleA[msk_left] = -doubleA
     doubleB[msk_left] = -doubleB
     # find the maximum and minimum out of the two clicks
@@ -58,7 +58,7 @@ for i, file in enumerate(files):
     # flipt the sign of click errors in the leftward motion
     single1[msk_left] = -single1
 
-    # single2: click error of the first and only flash
+    # single2: click error of the second and only flash
     msk_single = (df['cnd'] == 'single2')
     click = df.loc[msk_single, 'click1_xloc']
     probe = df.loc[msk_single, 'probe_xloc']
@@ -94,4 +94,4 @@ axs.set_title(f"N = {num_sub}")
 plt.tight_layout()
 # plt.show()
 script_name = os.path.basename(__file__)[:7]
-fig.savefig(f"Results/{script_name}_{exp}_perceptionErr.pdf")
+fig.savefig(f"results/{script_name}_{exp}_perceptionErr.pdf")

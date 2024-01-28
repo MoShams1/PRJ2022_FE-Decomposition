@@ -34,7 +34,7 @@ def find_target_files(path_name, exp_name):
     return [f for f in all_files if exp_name in f]
 
 
-path = 'Data/CleanData'
+path = 'Data'
 exp = 'Exp03'
 files = find_target_files(path, exp)
 
@@ -52,7 +52,7 @@ offset1 = -.5
 offset2 = -.6
 offset3 = -.7
 plt.style.use('seaborn')
-sup.init_figure()
+# sup.init_figure()
 
 for i, file in enumerate(files):
     df = pd.read_json(os.path.join(path, file))
@@ -116,4 +116,4 @@ axs.plot((0.5, 0), (offset1, offset1), alpha=linealpha, color=colors[2],
 
 # plt.show()
 script_name = os.path.basename(__file__)[:7]
-fig.savefig(f"Results/{script_name}_{exp}_probe2frame.pdf")
+fig.savefig(f"results/{script_name}_{exp}_probe2frame.pdf")

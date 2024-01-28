@@ -13,7 +13,7 @@ def find_target_files(path_name, exp_name):
     return [f for f in all_files if exp_name in f]
 
 
-path = 'Data/CleanData'
+path = 'Data'
 exp = 'Exp01'
 files = find_target_files(path, exp)
 num_sub = 5
@@ -22,7 +22,7 @@ num_sub = 5
 normalize = False
 
 plt.style.use('seaborn')
-supplements.init_figure()
+# supplements.init_figure()
 
 all_double = np.full((num_sub, 1), np.nan)
 all_single2 = np.full((num_sub, 1), np.nan)
@@ -75,4 +75,4 @@ axs.set_title(f"N = {num_sub}")
 fig.tight_layout()
 # plt.show()
 script_name = os.path.basename(__file__)[:7]
-fig.savefig(f"Results/{script_name}_{exp}_perceptionErr.pdf")
+fig.savefig(f"results/{script_name}_{exp}_perceptionErr.pdf")

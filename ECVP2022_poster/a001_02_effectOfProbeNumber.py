@@ -25,8 +25,8 @@ def find_target_files(path_name, exp_name):
     return [f for f in all_files if exp_name in f]
 
 
-path = 'Data/CleanData'
-exp = 'Exp02'
+path = 'Data'
+exp = 'Exp01'
 files = find_target_files(path, exp)
 
 num_sub = 5
