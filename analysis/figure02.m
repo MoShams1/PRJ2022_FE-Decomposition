@@ -126,3 +126,12 @@ text(.5,.3,'Leading probe','color',clead)
 text(-2.2, 2.3, 'N = 5')
 
 cleanplot
+
+%%% stat fig02-B
+display(['single-trail: ', num2str(signrank(trail1))])
+display(['double-trail: ', num2str(signrank(trail2))])
+display(['single-lead: ',  num2str(signrank(lead1))])
+display(['double-lead: ',  num2str(signrank(lead2))])
+
+display(['single vs double trail: ', num2str(signrank(trail1,trail2))])
+display(['single vs double lead: ', num2str(signrank(lead1,lead2))])

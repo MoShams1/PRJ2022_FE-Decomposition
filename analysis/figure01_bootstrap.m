@@ -49,42 +49,61 @@ for isub = 1:nsub
 
 end
 
+%%% =====================================================================================
 %%%%% Figure 01
 figure('units','inches','outerposition',[7, 4, 6, 5])
 
+%%% =====================================================================================
 %%% Figure 01-A
 % The stimulus scheme
 
+%%% =====================================================================================
 %%% Figure 01-B
 subplot(1,2,1)
 hold on
 
 csingle = .6 * ones(1,3);
 cdouble = 'k';
-lw = 1.5;  % line width
+lw = 1.5;
 xtick_vec = 1:3;
 ytick_vec = 0:5;
+marker_sz = 100;
+marker_a = .2;
+
+nboot = 10000;
 
 x = 1:3;
-y1 = median(one_click_offset_mat,1);
-err1 = MAD(one_click_offset_mat);
 
-y2 = median(two_click_dist_mat,1);
-err2 = MAD(two_click_dist_mat);
+mean_boot_single = bootstrp(nboot, @mean, one_click_offset_mat);
+y1 = median(mean_boot_single);
+neg1 = prctile(mean_boot_single, 25) - y1;
+pos1 = prctile(mean_boot_single, 75) - y1;
+
+mean_boot_double = bootstrp(nboot, @mean, two_click_dist_mat);
+y2 = median(mean_boot_double);
+neg2 = prctile(mean_boot_double, 25) - y2;
+pos2 = prctile(mean_boot_double, 75) - y2;
+
+xmat = repmat([1 2 3], 5, 1);
+scatter( ...
+    xmat, one_click_offset_mat, ...
+    marker_sz, csingle, 'o');
+scatter( ...
+    xmat, two_click_dist_mat, ...
+    marker_sz, cdouble, 's');
 
 errorbar(...
-    x, y1, err1,...
+    x, y1, neg1, pos1,...
     'color',csingle,...
     'linewidth',lw,...
     'marker','o',...
     'markerfacecolor',csingle,...
     'markeredgecolor',csingle)
-
 errorbar(...
-    x, y2, err2,...
+    x, y2, neg2, pos2,...
     'color',cdouble,...
     'linewidth',lw,...
-    'marker','o',...
+    'marker','s',...
     'markerfacecolor',cdouble,...
     'markeredgecolor',cdouble)
 
@@ -96,55 +115,66 @@ ylabel 'Absolute perceived offset (dva)'
 yticks(ytick_vec)
 ylim([ytick_vec(1)-.5 ytick_vec(end)])
 
-text(2, .3, 'One Probe', 'color', csingle)
-text(2, 4.5, 'Two Probes', 'color', cdouble)
-text(.7, 0, 'N = 5')
+text(2, .2, 'One Probe', 'color', csingle, 'horizontalalignment','center')
+text(2, 4.5, 'Two Probes', 'color', cdouble, 'horizontalalignment','center')
 
 cleanplot
 
-% Stat fig 01-B
-p = friedman(two_click_dist_mat, 1, 'off');
-display(['Fig01B-Double Cnd (friedman p) = ',num2str(p)])
-
-p = friedman(one_click_offset_mat, 1, 'off');
-display(['Fig01B-Single Cnd (friedman p) = ',num2str(p)])
+%%% ---------------------------------
+%%% Stat fig 01-B
 
 rng('default')
 nboot = 10000;
 reference = 0;
 
 measured_diff = cal_median_diff(two_click_dist_mat);
-
 boot_dist = bootstrp(nboot, @cal_median_diff, two_click_dist_mat) - (measured_diff - reference);
 sum_above = sum(boot_dist >= measured_diff);
 sum_below = sum(boot_dist <= -measured_diff);
-p_boot = (sum_above + sum_below) / nboot;
+p_boot_double = (sum_above + sum_below) / nboot;
+display(['Fig01B-Double Cnd (boot p) = ', num2str(p_boot_double)])
 
+measured_diff = cal_median_diff(one_click_offset_mat);
+boot_dist = bootstrp(nboot, @cal_median_diff, one_click_offset_mat) - (measured_diff - reference);
+sum_above = sum(boot_dist >= measured_diff);
+sum_below = sum(boot_dist <= -measured_diff);
+p_boot_double = (sum_above + sum_below) / nboot;
+display(['Fig01B-Single Cnd (boot p) = ', num2str(p_boot_double)])
 
+%%% =====================================================================================
 %%% Figure 01-C
+
 subplot(1,2,2)
+hold on
 
 c = 'k';
-lw = 1.5;  % line width
+lw = 1.5;
 xtick_vec = 1:3;
-ytick_vec = 1:3;
+ytick_vec = 1:4;
+marker_sz = 100;
 
 x = 1:3;
-ratio_mat = two_click_dist_mat ./ one_click_offset_mat;
-y = median(ratio_mat, 1);
-err = MAD(ratio_mat);
 
+ratio_mat = two_click_dist_mat ./ one_click_offset_mat;
+
+mean_boot_ratio = bootstrp(nboot, @mean, ratio_mat);
+y = median(mean_boot_ratio);
+neg = prctile(mean_boot_ratio, 25) - y;
+pos = prctile(mean_boot_ratio, 75) - y;
+
+xmat = repmat([1 2 3], 5, 1);
+scatter( ...
+    xmat, ratio_mat, ...
+    marker_sz, c, 'o');
 errorbar(...
-    x, y, err,...
+    x, y, neg, pos,...
     'color',c,...
     'linewidth',lw,...
     'marker','o',...
     'markerfacecolor',c, ...
     'markeredgecolor',c)
 
-yline(...
-    2, ...
-    'linestyle','--')
+yline(2, 'linestyle','--')
 
 xlabel 'Number of cycles'
 xticks(xtick_vec)
@@ -154,30 +184,46 @@ ylabel({'Relative perceived offset'; 'Two probes / One probe'});
 yticks(ytick_vec)
 ylim([ytick_vec(1)-.2 ytick_vec(end)])
 
-text(.7, 1, 'N = 5')
-
 cleanplot
 
-% Stat fig 01-C
-p_friedman = friedman(ratio_mat, 1, 'off');
-display(['Fig01C (friedman p) = ',num2str(p_friedman)])
-
-measured_medians = median(ratio_mat);
+%%% ---------------------------------
+%%% Stat fig 01-C
 
 rng('default')
 nboot = 10000;
 nmultiple = 3;
-reference = 2;
+reference = 0;
 
+measured_diff = cal_median_diff(ratio_mat);
+boot_dist = bootstrp(nboot, @cal_median_diff, ratio_mat) - (measured_diff - reference);
+sum_above = sum(boot_dist >= measured_diff);
+sum_below = sum(boot_dist <= -measured_diff);
+p_boot_ratio = (sum_above + sum_below) / nboot;
+display(['Fig01C (boot p) = ', num2str(p_boot_ratio)])
+
+reference = 2;
+measured_medians = median(ratio_mat);
 for icol = 1:3
     vec = ratio_mat(:,icol);
     med_vec = bootstrp(nboot, @median, vec) - (measured_medians(icol) - reference);
     sum_above = sum(med_vec >= measured_medians(icol));
     sum_below = sum(med_vec <= -measured_medians(icol));
-    p_boot(icol) = (sum_above + sum_below) / nboot;
+    p_boot_cyc(icol) = (sum_above + sum_below) / nboot;
 end
-display(['Fig01C (boot p) = ',num2str(p_boot)])
+display(['Fig01C (boot p) = ',num2str(p_boot_cyc)])
 
+reference = 2;
+ratio_vec = mean(ratio_mat,2);
+measured_median = median(ratio_vec);
+
+med_vec = bootstrp(nboot, @median, ratio_vec) - (measured_median - reference);
+sum_above = sum(med_vec >= measured_median);
+sum_below = sum(med_vec <= -measured_median);
+p_boot_cyc_pool = (sum_above + sum_below) / nboot;
+
+display(['Fig01C-pooled (boot p) = ',num2str(p_boot_cyc_pool)])
+
+%%% =====================================================================================
 function diff_vec = cal_median_diff(x)
 mean_vec = mean(x);
 diff_vec = mean_vec(1)-(mean_vec(2)-mean_vec(3));

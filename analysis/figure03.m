@@ -91,6 +91,15 @@ lw = 1.5;  % line width
 xtick_vec = -10:5:10;
 ytick_vec = 0:3;
 
+% falpha = .5;
+% fill([-7.5 7.5 7.5 -7.5]/2,[-.5 -.5 3 3],color(1,:),'facealpha',falpha,'edgecolor','none')
+% fill([-5 5 5 -5]/2,[-.5 -.5 3 3],color(2,:),'facealpha',falpha,'edgecolor','none')
+% fill([-.5 .5 .5 -.5]/2,[-.5 -.5 3 3],color(3,:),'facealpha',falpha,'edgecolor','none')
+
+% xline([-7.5 7.5]/2,'color',color(1,:),'linewidth',lw,'linestyle','-')
+% xline([-5 5]/2,'color',color(2,:),'linewidth',lw,'linestyle','-')
+% xline([-.5 .5]/2,'color',color(3,:),'linewidth',lw,'linestyle','-')
+
 for isz = 1:3
     err = SE(y_sz(:,:,isz));
     y = mean(y_sz(:,:,isz));
@@ -129,3 +138,18 @@ text(6.5,-.1,'N = 4')
 
 cleanplot
 
+%%% stat fig03-C
+lead_trail_diff = y_all(:,6:10) - y_all(:,1:5);
+display(['Lead vs Trail (all): ', num2str(signrank(lead_trail_diff(:)))])
+
+lead_trail_diff = y_sz(:,6:10,1) - y_sz(:,1:5,1);
+display(['Lead vs Trail (7): ', num2str(signrank(lead_trail_diff(:)))])
+lead_trail_diff = y_sz(:,6:10,2) - y_sz(:,1:5,2);
+display(['Lead vs Trail (5): ', num2str(signrank(lead_trail_diff(:)))])
+lead_trail_diff = y_sz(:,6:10,3) - y_sz(:,1:5,3);
+display(['Lead vs Trail (0.5): ', num2str(signrank(lead_trail_diff(:)))])
+
+diff_sz1_sz2 = y_sz(:,:,1)-y_sz(:,:,2);
+display(['7 vs 5: ',num2str(signrank(diff_sz1_sz2(:)))])
+diff_sz2_sz3 = y_sz(:,:,2)-y_sz(:,:,3);
+display(['5 vs 0.5: ',num2str(signrank(diff_sz2_sz3(:)))])
