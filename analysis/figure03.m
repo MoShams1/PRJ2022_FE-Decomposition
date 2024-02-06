@@ -2,7 +2,7 @@ clc
 clear
 close all
 
-% Specify the path to the JSON filesß
+% Specify the path to the JSON files
 
 file_dir = dir('../data/*Exp03*');
 nsub = numel(file_dir);
@@ -70,11 +70,11 @@ errorbar(...
     'color',color, ...
     'linewidth',lw)
 
-xlabel 'Probe to frame''s center distance (dva)'
+xlabel 'Probe to frame''s center (dva)'
 xticks(xtick_vec)
 xlim([xtick_vec(1)-.5 xtick_vec(end)+.5])
 
-ylabel({'Perceived offset (dva)', 'in direction of motion'})
+ylabel({'Perceived offset (dva)', '(in direction of motion)'})
 yticks(ytick_vec)
 ylim([ytick_vec(1)-.4 ytick_vec(end)])
 
@@ -110,11 +110,11 @@ for isz = 1:3
         'linewidth',lw)
 end
 
-xlabel 'Probe to frame''s center distance (dva)'
+xlabel 'Probe to frame''s center (dva)'
 xticks(xtick_vec)
 xlim([xtick_vec(1)-.5 xtick_vec(end)+.5])
 
-ylabel({'Perceived offset (dva)', 'in direction of motion'})
+ylabel({'Perceived offset (dva)', '(in direction of motion)'})
 yticks(ytick_vec)
 ylim([ytick_vec(1)-.4 ytick_vec(end)])
 
@@ -132,7 +132,7 @@ plot( ...
     'color',color(3,:));
 
 text(-10,2.2,'Frame width = 7.5 dva','color',color(1,:))
-text(-10,2,'Frame width = 5 dva','color',color(2,:))
+text(-10,2,'Frame width = 5.0 dva','color',color(2,:))
 text(-10,1.8,'Frame width = 0.5 dva','color',color(3,:))
 text(6.5,-.1,'N = 4')
 
