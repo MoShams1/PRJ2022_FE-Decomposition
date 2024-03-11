@@ -22,8 +22,8 @@ import os
 # insert session meta data
 # -------------------------------------------------
 person = 'test'
-session = '012'
-n_trials = 90  # 20 x 3 (180 trials)
+session = '01'
+n_trials = 180
 # -------------------------------------------------
 # destination file
 # -------------------------------------------------
@@ -79,9 +79,6 @@ for itrial in range(n_trials):
 
     # randomly select the direction of frame's motion
     fr_dir = 'right'
-    # if random.choice([False, True]):
-    #     fr_stops_arr = fr_stops_arr[::-1]
-    #     fr_dir = 'left'
 
     # randomly select the frame size
     FR_WIDTH = random.choice(fr_width_arr)

@@ -49,13 +49,13 @@ end
 
 
 %%%%% Figure 03
-figure('units','inches','outerposition',[7, 4, 4, 8])
+figure('units','inches','outerposition',[7, 4, 8.5, 8])
 
 %%% Figure 03-A
 % The stimulus scheme
 
 %%% Figure 03-B
-subplot(2,1,1)
+subplot(2,2,2)
 
 color = 'k';
 lw = 1.5;  % line width
@@ -66,9 +66,14 @@ err = SE(y_all);
 y = mean(y_all);
 
 errorbar(...
-    x,y,err,...    
+    x,y,err,...
+    'o', ...
+    'markerfacecolor',color, ...
+    'markeredgecolor','none', ...
     'color',color, ...
     'linewidth',lw)
+
+yline(0,'--')
 
 xlabel 'Probe to frame''s center (dva)'
 xticks(xtick_vec)
@@ -83,22 +88,13 @@ text(6.5,-.1,'N = 4')
 cleanplot
 
 %%% Figure 03-C
-subplot(2,1,2)
+subplot(2,2,3)
 hold on
 
 color = gray(4);
-lw = 1.5;  % line width
+lw = 1.5;
 xtick_vec = -10:5:10;
 ytick_vec = 0:3;
-
-% falpha = .5;
-% fill([-7.5 7.5 7.5 -7.5]/2,[-.5 -.5 3 3],color(1,:),'facealpha',falpha,'edgecolor','none')
-% fill([-5 5 5 -5]/2,[-.5 -.5 3 3],color(2,:),'facealpha',falpha,'edgecolor','none')
-% fill([-.5 .5 .5 -.5]/2,[-.5 -.5 3 3],color(3,:),'facealpha',falpha,'edgecolor','none')
-
-% xline([-7.5 7.5]/2,'color',color(1,:),'linewidth',lw,'linestyle','-')
-% xline([-5 5]/2,'color',color(2,:),'linewidth',lw,'linestyle','-')
-% xline([-.5 .5]/2,'color',color(3,:),'linewidth',lw,'linestyle','-')
 
 for isz = 1:3
     err = SE(y_sz(:,:,isz));
@@ -106,9 +102,14 @@ for isz = 1:3
 
     errorbar(...
         x,y,err,...
+        'o', ...
+        'markerfacecolor',color(isz,:), ...
+        'markeredgecolor','none', ...
         'color',color(isz,:), ...
         'linewidth',lw)
 end
+
+yline(0,'--')
 
 xlabel 'Probe to frame''s center (dva)'
 xticks(xtick_vec)
@@ -153,3 +154,95 @@ diff_sz1_sz2 = y_sz(:,:,1)-y_sz(:,:,2);
 display(['7 vs 5: ',num2str(signrank(diff_sz1_sz2(:)))])
 diff_sz2_sz3 = y_sz(:,:,2)-y_sz(:,:,3);
 display(['5 vs 0.5: ',num2str(signrank(diff_sz2_sz3(:)))])
+
+
+%%% fit Gaussian
+
+x = (-9:2:9)';
+x_precise = (-9:.1:9)';
+
+%%% for all sizes poold
+subplot(2,2,2)
+hold on
+
+y = mean(y_all)';
+[y_mod, gof] = fit(x, y, fittype('gauss1'));
+r2_all = gof.adjrsquare;
+fit_amp_all = y_mod.a1;
+fit_mean_all = y_mod.b1;
+fit_std_all = y_mod.c1;
+
+fprintf( ...
+    'Fig03B fit (r2=%4.2f): amp = %3.1f dva, dist = %3.1f dva, std = %3.1f\n', ...
+    r2_all, fit_amp_all, fit_mean_all, fit_std_all)
+
+y_precise = feval(y_mod, x_precise);
+plot(x_precise, y_precise, ...
+    'color','k', ...
+    'linewidth',lw)
+
+%%% for each size separately
+subplot(2,2,3)
+hold on
+
+log_legend = {'width 7.5', 'width 5', 'width 0.5'};
+
+for iframe_sz = 1:3
+    y = mean(y_sz(:,:,iframe_sz))';
+    [y_mod, gof] = fit(x, y, fittype('gauss1'));
+    r2(iframe_sz) = gof.adjrsquare;
+    fit_amp(iframe_sz) = y_mod.a1;
+    fit_mean(iframe_sz) = y_mod.b1;
+    fit_std(iframe_sz) = y_mod.c1;
+    
+    fprintf( ...
+    'Fig03C fit %s (r2=%4.2f): amp = %3.1f dva, dist = %3.1f dva, std = %3.1f\n', ...
+    log_legend{iframe_sz}, r2(iframe_sz), ...
+    fit_amp(iframe_sz), fit_mean(iframe_sz), fit_std(iframe_sz))
+
+    y_precise(:,iframe_sz) = feval(y_mod, x_precise);
+    plot(x_precise, y_precise(:,iframe_sz), ...
+        'color',color(iframe_sz,:), ...
+        'linewidth',lw)
+end
+
+
+%%% Figure 03-D
+subplot(2,2,4)
+hold on
+plot(x_precise, y_precise(:,1)./max(y_precise(:,1)), ...
+    'color',color(1,:), 'linewidth',lw)
+plot(x_precise, y_precise(:,2)./max(y_precise(:,2)), ...
+    'color',color(2,:), 'linewidth',lw)
+plot(x_precise, y_precise(:,3)./max(y_precise(:,3)), ...
+    'color',color(3,:), 'linewidth',lw)
+
+yline(0,'--')
+
+xlabel 'Probe to frame''s center (dva)'
+xticks(xtick_vec)
+xlim([xtick_vec(1)-.5 xtick_vec(end)+.5])
+
+ylabel({'Normalized perceived offset', '(in direction of motion)'})
+yticks([0 .5 1])
+ylim([-0.15 1.2])
+
+plot( ...
+    [-7.5/2 7.5/2],[1.2 1.2], ...
+    'linewidth',2*lw, ...
+    'color',color(1,:));
+plot( ...
+    [-5/2 5/2],[1.16 1.16], ...
+    'linewidth',2*lw, ...
+    'color',color(2,:));
+plot( ...
+    [-.5/2 .5/2],[1.12 1.12], ...
+    'linewidth',2*lw, ...
+    'color',color(3,:));
+
+cleanplot
+
+saveas(gcf, '../results/fig03BCD.pdf')
+
+%% calculate the time corresponding x-axis
+round(1433 * 20 / 18) / 2

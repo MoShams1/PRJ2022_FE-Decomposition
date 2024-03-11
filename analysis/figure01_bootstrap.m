@@ -158,7 +158,7 @@ x = 1:3;
 ratio_mat = two_click_dist_mat ./ one_click_offset_mat;
 
 mean_boot_ratio = bootstrp(nboot, @mean, ratio_mat);
-y = mean(mean_boot_ratio);
+y = mean(ratio_mat);
 neg = prctile(mean_boot_ratio, 25) - y;
 pos = prctile(mean_boot_ratio, 75) - y;
 
@@ -223,9 +223,10 @@ p_boot_cyc_pool = (sum_above + sum_below) / nboot;
 
 display(['Fig01C (comparison to baseline; pooled) p = ',num2str(p_boot_cyc_pool)])
 
+saveas(gcf, '../results/fig01BC.pdf')
+
 %%% =====================================================================================
 function diff_vec = cal_mean_diff(x)
 mean_vec = mean(x);
 diff_vec = mean_vec(1)-(mean_vec(2)-mean_vec(3));
 end
-
