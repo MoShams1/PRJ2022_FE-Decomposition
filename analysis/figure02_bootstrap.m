@@ -106,7 +106,7 @@ barw = .4;
 
 % plot the leading mislocalizations
 x = [1, 2]+.25;
-ymat = repmat(x, 5, 1);
+ymat = repmat(x, nsub, 1);
 barh(x,xlead, barw, ...
     'facecolor',clead, ...
     'edgecolor','none')
@@ -124,7 +124,7 @@ errorbar(...
 
 % plot the trailing mislocalizations
 x = [1, 2]-.25;
-ymat = repmat(x, 5, 1);
+ymat = repmat(x, nsub, 1);
 barh(x,xtrail, barw, ...
     'facecolor',ctrail, ...
     'edgecolor','none')
