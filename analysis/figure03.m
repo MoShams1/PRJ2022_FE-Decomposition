@@ -83,7 +83,7 @@ ylabel({'Perceived offset (dva)', '(in direction of motion)'})
 yticks(ytick_vec)
 ylim([ytick_vec(1)-.4 ytick_vec(end)])
 
-text(6.5,-.1,'N = 4')
+text(6.5,-.2,['N = ', num2str(nsub)])
 
 cleanplot
 
@@ -135,7 +135,7 @@ plot( ...
 text(-10,2.2,'Frame width = 7.5 dva','color',color(1,:))
 text(-10,2,'Frame width = 5.0 dva','color',color(2,:))
 text(-10,1.8,'Frame width = 0.5 dva','color',color(3,:))
-text(6.5,-.1,'N = 4')
+text(6.5,-.2,['N = ', num2str(nsub)])
 
 cleanplot
 
