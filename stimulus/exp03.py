@@ -25,13 +25,14 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 # -------------------------------------------------
 # insert session meta data
 # -------------------------------------------------
-person = 'AM'
+person = 'SC'
 n_trials = 180
 # -------------------------------------------------
 # destination file
 # -------------------------------------------------
 date = sup.get_date()
-file_name = f"Exp03_{person}_{date}.json"
+time = sup.get_time()
+file_name = f"Exp03_{person}_{date}_{time}.json"
 data_path = os.path.join('..', 'data', file_name)
 # -------------------------------------------------
 # initialize the display and set up task parameters

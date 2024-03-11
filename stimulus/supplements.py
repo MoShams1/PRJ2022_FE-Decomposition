@@ -1,5 +1,5 @@
 from psychopy import monitors, visual, event, core
-from datetime import date
+from datetime import date, datetime
 
 
 def config_mon_imac24():
@@ -77,6 +77,11 @@ def get_date():
     return (str(today.year).zfill(4) +
             str(today.month).zfill(2) +
             str(today.day).zfill(2))
+
+
+def get_time():
+    now = datetime.now()
+    return now.strftime("%H%M%S")
 
 
 def opening_msg(win, task_num):

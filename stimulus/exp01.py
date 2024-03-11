@@ -30,7 +30,8 @@ n_trials = 60
 # destination file
 # -------------------------------------------------
 date = sup.get_date()
-file_name = f"Exp01_{person}_{date}.json"
+time = sup.get_time()
+file_name = f"Exp01_{person}_{date}_{time}.json"
 data_path = os.path.join('..', 'data', file_name)
 # -------------------------------------------------
 # initialize the display and set up task parameters
