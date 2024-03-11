@@ -16,24 +16,27 @@ import pandas as pd
 import numpy as np
 import random
 import os
+import warnings
+
+
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 # -------------------------------------------------
 # insert session meta data
 # -------------------------------------------------
-person = 'AC'
-session = '01'
-n_trials = 60  # 3 x 2 conditions (60 trials)
+person = 'test'
+n_trials = 60
 # -------------------------------------------------
 # destination file
 # -------------------------------------------------
 date = sup.get_date()
-file_name = f"Exp01_{date}_{person}_S{session}.json"
-data_path = os.path.join('Data', file_name)
+file_name = f"Exp01_{person}_{date}.json"
+data_path = os.path.join('..', 'data', file_name)
 # -------------------------------------------------
 # initialize the display and set up task parameters
 # -------------------------------------------------
 # configure the monitor and the stimulus window
-mon = sup.config_mon_imac24()
+mon = sup.config_mon_dell()
 win = sup.config_win(mon=mon, fullscr=True)
 
 REF_RATE = 60
@@ -223,3 +226,5 @@ for itrial in range(n_trials):
         df = pd.read_json(data_path)
         dfnew = pd.concat([df, dfnew], ignore_index=True)
         dfnew.to_json(data_path)
+
+sup.end_screen(win, 'white')

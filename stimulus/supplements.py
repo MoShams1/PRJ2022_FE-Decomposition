@@ -8,6 +8,12 @@ def config_mon_imac24():
     return monitor
 
 
+def config_mon_dell():
+    monitor = monitors.Monitor('prim_mon', width=52, distance=70)
+    monitor.setSizePix([1920, 1080])
+    return monitor
+
+
 def config_win(mon, fullscr):
     win = visual.Window(monitor=mon,
                         units='deg',
@@ -124,3 +130,16 @@ def label_cnd(cnd):
         return 'single2'
     else:
         return 'double'
+
+
+def end_screen(win, color='black'):
+    msg = 'Experiment finished successfully.\n Thank you!'
+    message = visual.TextStim(win,
+                              text=msg,
+                              color=color,
+                              height=.65,
+                              alignText='center',
+                              pos=(0, 0))
+    for i in range(3 * 60):
+        message.draw()
+        win.flip()
