@@ -1,10 +1,10 @@
 clc
 clear
-close all
+% close all
 
-% Specify the path to the JSON files
+% Specify the path to the JSON filesß
 
-file_dir = dir('../data/*Exp03*');
+file_dir = dir('../data/*Exp02*');
 nsub = numel(file_dir);
 
 
@@ -21,228 +21,164 @@ for isub = 1:nsub
     % Parse the JSON content
     jsonData = jsondecode(jsonContent);
 
-
-    %%% convert structure to arrays    
-    frame_x = cell2mat(struct2cell(jsonData.frame_flashxloc));
-    frame_sz = cell2mat(struct2cell(jsonData.frame_size));
-    click_x = cell2mat(struct2cell(jsonData.click1_xloc));
+    %%% convert structure to arrays
+    cnd_proben = struct2cell(jsonData.cnd);
+    cnd_double = strcmp(cnd_proben,'double');
+    cnd_single1 = strcmp(cnd_proben,'single1');
+    cnd_single2 = strcmp(cnd_proben,'single2');
+    click1_x = cell2mat(struct2cell(jsonData.click1_xloc));
+    click2_x = struct2cell(jsonData.click2_xloc);
+    click2_x(cellfun(@isempty, click2_x)) = {NaN};
+    click2_x = cell2mat(click2_x);
     probe_x = cell2mat(struct2cell(jsonData.probe_xloc));
+    frame_dir = struct2cell(jsonData.frame_dir);
+    dir_left = strcmp(frame_dir,'left');
     
-    
+
     %%% prepare data for figures
 
-    % calculate probe distance to the frame
-    pr_fr_dist = probe_x - frame_x;
-    % calculate click error
-    click_err = click_x - probe_x;
-    % calculate avverage error independent of the frame size
-    [x,y_all(isub,:)] = scatter2line([pr_fr_dist, click_err], 10);
-    % calculate average error for each frame size
-    ind75 = frame_sz == 7.5;
-    [x,y_sz(isub,:,1)] = scatter2line([pr_fr_dist(ind75), click_err(ind75)], 10);    
-    ind50 = frame_sz == 5;
-    [x,y_sz(isub,:,2)] = scatter2line([pr_fr_dist(ind50), click_err(ind50)], 10);
-    ind05 = frame_sz == .5;
-    [x,y_sz(isub,:,3)] = scatter2line([pr_fr_dist(ind05), click_err(ind05)], 10);
+    % calculate the offset of the leading and trailing probes in the double
+    % conditions
+    click1_err_vec = click1_x - probe_x;
+    click1_err_vec(dir_left) = -click1_err_vec(dir_left);
+    click2_err_vec = click2_x - probe_x;
+    click2_err_vec(dir_left) = -click2_err_vec(dir_left);
 
-end
+    lead2_vec = max([click1_err_vec, click2_err_vec], [], 2);
+    lead2_vec(~cnd_double) = nan;
+    lead2(isub,1) = nanmean(lead2_vec);
 
+    trail2_vec = min([click1_err_vec, click2_err_vec], [], 2);
+    trail2_vec(~cnd_double) = nan;
+    trail2(isub,1) = nanmean(trail2_vec);
 
-%%%%% Figure 03
-figure('units','inches','outerposition',[7, 4, 8.5, 8])
-
-%%% Figure 03-A
-% The stimulus scheme
-
-%%% Figure 03-B
-subplot(2,2,2)
-
-color = 'k';
-lw = 1.5;  % line width
-xtick_vec = -10:5:10;
-ytick_vec = 0:3;
-
-err = SE(y_all);
-y = mean(y_all);
-
-errorbar(...
-    x,y,err,...
-    'o', ...
-    'markerfacecolor',color, ...
-    'markeredgecolor','none', ...
-    'color',color, ...
-    'linewidth',lw)
-
-yline(0,'--')
-
-xlabel 'Probe to frame''s center (dva)'
-xticks(xtick_vec)
-xlim([xtick_vec(1)-.5 xtick_vec(end)+.5])
-
-ylabel({'Perceived offset (dva)', '(in direction of motion)'})
-yticks(ytick_vec)
-ylim([ytick_vec(1)-.4 ytick_vec(end)])
-
-text(6.5,-.2, ['N = ', num2str(nsub)])
-
-cleanplot
-
-%%% Figure 03-C
-subplot(2,2,3)
-hold on
-
-color = gray(4);
-lw = 1.5;
-xtick_vec = -10:5:10;
-ytick_vec = 0:3;
-
-for isz = 1:3
-    err = SE(y_sz(:,:,isz));
-    y = mean(y_sz(:,:,isz));
-
-    errorbar(...
-        x,y,err,...
-        'o', ...
-        'markerfacecolor',color(isz,:), ...
-        'markeredgecolor','none', ...
-        'color',color(isz,:), ...
-        'linewidth',lw)
-end
-
-yline(0,'--')
-
-xlabel 'Probe to frame''s center (dva)'
-xticks(xtick_vec)
-xlim([xtick_vec(1)-.5 xtick_vec(end)+.5])
-
-ylabel({'Perceived offset (dva)', '(in direction of motion)'})
-yticks(ytick_vec)
-ylim([ytick_vec(1)-.4 ytick_vec(end)])
-
-plot( ...
-    [-7.5/2 7.5/2],[3 3], ...
-    'linewidth',2*lw, ...
-    'color',color(1,:));
-plot( ...
-    [-5/2 5/2],[2.9 2.9], ...
-    'linewidth',2*lw, ...
-    'color',color(2,:));
-plot( ...
-    [-.5/2 .5/2],[2.8 2.8], ...
-    'linewidth',2*lw, ...
-    'color',color(3,:));
-
-text(-10,2.2,'Frame width = 7.5 dva','color',color(1,:))
-text(-10,2,'Frame width = 5.0 dva','color',color(2,:))
-text(-10,1.8,'Frame width = 0.5 dva','color',color(3,:))
-text(6.5,-.2, ['N = ', num2str(nsub)])
-
-cleanplot
-
-%%% stat fig03-C
-lead_trail_diff = y_all(:,6:10) - y_all(:,1:5);
-display(['Lead vs Trail (all): ', num2str(signrank(lead_trail_diff(:)))])
-
-lead_trail_diff = y_sz(:,6:10,1) - y_sz(:,1:5,1);
-display(['Lead vs Trail (7): ', num2str(signrank(lead_trail_diff(:)))])
-lead_trail_diff = y_sz(:,6:10,2) - y_sz(:,1:5,2);
-display(['Lead vs Trail (5): ', num2str(signrank(lead_trail_diff(:)))])
-lead_trail_diff = y_sz(:,6:10,3) - y_sz(:,1:5,3);
-display(['Lead vs Trail (0.5): ', num2str(signrank(lead_trail_diff(:)))])
-
-diff_sz1_sz2 = y_sz(:,:,1)-y_sz(:,:,2);
-display(['7 vs 5: ',num2str(signrank(diff_sz1_sz2(:)))])
-diff_sz2_sz3 = y_sz(:,:,2)-y_sz(:,:,3);
-display(['5 vs 0.5: ',num2str(signrank(diff_sz2_sz3(:)))])
-
-
-%%% fit Gaussian
-
-x = (-9:2:9)';
-x_precise = (-9:.1:9)';
-
-%%% for all sizes poold
-subplot(2,2,2)
-hold on
-
-y = mean(y_all)';
-[y_mod, gof] = fit(x, y, fittype('gauss1'));
-r2_all = gof.adjrsquare;
-fit_amp_all = y_mod.a1;
-fit_mean_all = y_mod.b1;
-fit_std_all = y_mod.c1;
-
-fprintf( ...
-    'Fig03B fit (r2=%4.2f): amp = %3.1f dva, dist = %3.1f dva, std = %3.1f\n', ...
-    r2_all, fit_amp_all, fit_mean_all, fit_std_all)
-
-y_precise = feval(y_mod, x_precise);
-plot(x_precise, y_precise, ...
-    'color','k', ...
-    'linewidth',lw)
-
-%%% for each size separately
-subplot(2,2,3)
-hold on
-
-log_legend = {'width 7.5', 'width 5', 'width 0.5'};
-
-for iframe_sz = 1:3
-    y = nanmean(y_sz(:,:,iframe_sz))';
-    [y_mod, gof] = fit(x, y, fittype('gauss1'));
-    r2(iframe_sz) = gof.adjrsquare;
-    fit_amp(iframe_sz) = y_mod.a1;
-    fit_mean(iframe_sz) = y_mod.b1;
-    fit_std(iframe_sz) = y_mod.c1;
+    % calculate the offset of the leading and trailing probes in the single
+    % conditions
+    click_err = click1_x - probe_x;
+    click_err(dir_left) = -click_err(dir_left);
+    click_err(~cnd_single1) = nan;
+    lead1(isub,1) = nanmean(click_err);
     
-    fprintf( ...
-    'Fig03C fit %s (r2=%4.2f): amp = %3.1f dva, dist = %3.1f dva, std = %3.1f\n', ...
-    log_legend{iframe_sz}, r2(iframe_sz), ...
-    fit_amp(iframe_sz), fit_mean(iframe_sz), fit_std(iframe_sz))
+    click_err = click1_x - probe_x;
+    click_err(dir_left) = -click_err(dir_left);
+    click_err(~cnd_single2) = nan;
+    trail1(isub,1) = nanmean(click_err);
 
-    y_precise(:,iframe_sz) = feval(y_mod, x_precise);
-    plot(x_precise, y_precise(:,iframe_sz), ...
-        'color',color(iframe_sz,:), ...
-        'linewidth',lw)
 end
 
+%%% =====================================================================================
+%%%%% Figure 03
+figure('units','inches','outerposition',[7, 4, 4, 3.5])
 
-%%% Figure 03-D
-subplot(2,2,4)
+set(gca,'ydir','reverse')
 hold on
-plot(x_precise, y_precise(:,1)./max(y_precise(:,1)), ...
-    'color',color(1,:), 'linewidth',lw)
-plot(x_precise, y_precise(:,2)./max(y_precise(:,2)), ...
-    'color',color(2,:), 'linewidth',lw)
-plot(x_precise, y_precise(:,3)./max(y_precise(:,3)), ...
-    'color',color(3,:), 'linewidth',lw)
 
-yline(0,'--')
+% clead = .4 * ones(1,3);
+clead = [59 128 238] / 256;
+% ctrail = .7 * ones(1,3);
+ctrail = [237 28 36] / 256;
+cerr = 'k';
+lw = 1.5;
+xtick_vec = -3:4;
+ytick_vec = 1:2;
+marker_sz = 20;
+barw = .4;
 
-xlabel 'Probe to frame''s center (dva)'
+% plot the leading mislocalizations
+x = [1, 2]+.25;
+ymat = repmat(x, nsub, 1);
+barh(x,xlead, barw, ...
+    'facecolor',clead, ...
+    'edgecolor','none')
+scatter( ...
+    [lead1 lead2], ymat, ...
+    marker_sz, 'k', 'o');
+errorbar(...
+    xlead, x, neglead, poslead,...
+    'o', ...
+    'horizontal', ...
+    'marker','none', ...    
+    'color',cerr, ...
+    'linewidth',lw)
+
+
+% plot the trailing mislocalizations
+x = [1, 2]-.25;
+ymat = repmat(x, nsub, 1);
+barh(x,xtrail, barw, ...
+    'facecolor',ctrail, ...
+    'edgecolor','none')
+scatter( ...
+    [trail1 trail2], ymat, ...
+    marker_sz, 'k', 'o');
+errorbar(...
+    xtrail, x, negtrail, postrail,...
+    'o', ...
+    'horizontal', ...
+    'marker','none', ...    
+    'color',cerr, ...
+    'linewidth',lw)
+
+
+xlabel({'Perceived offset (dva)', '(in direction of motion)'})
 xticks(xtick_vec)
 xlim([xtick_vec(1)-.5 xtick_vec(end)+.5])
 
-ylabel({'Normalized perceived offset', '(in direction of motion)'})
-yticks([0 .5 1])
-ylim([-0.15 1.2])
+yticks(ytick_vec)
+yticklabels({'One-probe', 'Two-probe'})
+ylim([ytick_vec(1)-.8 ytick_vec(end)+.6])
 
-plot( ...
-    [-7.5/2 7.5/2],[1.2 1.2], ...
-    'linewidth',2*lw, ...
-    'color',color(1,:));
-plot( ...
-    [-5/2 5/2],[1.16 1.16], ...
-    'linewidth',2*lw, ...
-    'color',color(2,:));
-plot( ...
-    [-.5/2 .5/2],[1.12 1.12], ...
-    'linewidth',2*lw, ...
-    'color',color(3,:));
+text(-.5,.3,'Trailing probe','color',ctrail,'horizontalalignment','right')
+text(.5,.3,'Leading probe','color',clead,'horizontalalignment','left')
 
 cleanplot
 
-saveas(gcf, '../results/fig03BCD.pdf')
+saveas(gcf, '../results/fig02B.pdf')
 
-%% calculate the time corresponding x-axis
-round(1433 * 20 / 18) / 2
+%%% ---------------------------------
+%%% stat fig 3
+
+%%% all vs baseline
+% 
+% disp([ ...
+%     'One-probe trail: ', ...
+%     'diff = ', num2str(mean(trail1)),' dva, ', ...
+%     'p = ', num2str(ptrail1) ...
+%     ])
+% 
+% disp([ ...
+%     'One-probe lead: ', ...
+%     'diff = ', num2str(mean(lead1)),' dva, ', ...
+%     'p = ', num2str(plead1) ...
+%     ])
+% 
+% disp([ ...
+%     'Two-probe trail: '...
+%     'diff = ', num2str(mean(trail2)),' dva, ', ...
+%     'p = ', num2str(ptrail2) ...
+%     ])
+% 
+% disp([ ...
+%     'Two-probe lead: ', ...
+%     'diff = ', num2str(mean(lead2)),' dva, ', ...
+%     'p = ', num2str(plead2) ...
+%     ])
+% 
+% disp('---')
+% 
+% %%% trail1 vs trail2
+% 
+% disp([ ...    
+%     'One-probe vs Two-probe trails: ', ...
+%     'diff = ', num2str(mean(trail2-trail1)), ' dva, ', ...
+%     'p = ', num2str(pdiff_trail) ...
+%     ])
+% 
+% 
+% %%% lead1 vs lead2
+% 
+% disp([ ...
+%     'One-probe vs Two-probe leads: ', ...
+%     'diff = ', num2str(mean(lead2-lead1)), ' dva; ', ...
+%     'p = ', num2str(pdiff_lead) ...
+%     ])
