@@ -84,7 +84,7 @@ y2 = mean(two_click_dist_mat);
 neg2 = prctile(mean_boot_double, 25) - y2;
 pos2 = prctile(mean_boot_double, 75) - y2;
 
-xmat = repmat([1 2 3], 5, 1);
+xmat = repmat([1 2 3], nsub, 1);
 scatter( ...
     xmat, one_click_offset_mat, ...
     marker_sz, csingle, 'v');
@@ -162,7 +162,7 @@ y = mean(ratio_mat);
 neg = prctile(mean_boot_ratio, 25) - y;
 pos = prctile(mean_boot_ratio, 75) - y;
 
-xmat = repmat([1 2 3], 5, 1);
+xmat = repmat([1 2 3], nsub, 1);
 scatter( ...
     xmat, ratio_mat, ...
     marker_sz, c, 'o');
