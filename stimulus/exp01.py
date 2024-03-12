@@ -24,7 +24,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 # -------------------------------------------------
 # insert session meta data
 # -------------------------------------------------
-person = 'test'
+person = 'AM'
 n_trials = 60
 # -------------------------------------------------
 # destination file
