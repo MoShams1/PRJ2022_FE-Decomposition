@@ -1,6 +1,6 @@
 clc
 clear
-% close all
+close all
 
 % Specify the path to the JSON filesß
 
@@ -66,119 +66,72 @@ for isub = 1:nsub
 
 end
 
-%%% =====================================================================================
-%%%%% Figure 03
-figure('units','inches','outerposition',[7, 4, 4, 3.5])
 
+%%%%% Figure 02
+figure('units','inches','outerposition',[7, 4, 4.5, 4])
+
+%%% Figure 02-A
+% The stimulus scheme
+
+%%% Figure 02-B
 set(gca,'ydir','reverse')
 hold on
 
-% clead = .4 * ones(1,3);
-clead = [59 128 238] / 256;
-% ctrail = .7 * ones(1,3);
-ctrail = [237 28 36] / 256;
+clead = .4 * ones(1,3);
+ctrail = .7 * ones(1,3);
 cerr = 'k';
-lw = 1.5;
-xtick_vec = -3:4;
+lw = 1.5;  % line width
+xtick_vec = -2:3;
 ytick_vec = 1:2;
-marker_sz = 20;
-barw = .4;
 
 % plot the leading mislocalizations
-x = [1, 2]+.25;
-ymat = repmat(x, nsub, 1);
-barh(x,xlead, barw, ...
+x = [1, 2];
+y = [nanmean(lead1), nanmean(lead2)];
+err = [SE(lead1), SE(lead2)];
+barh(x,y, ...
     'facecolor',clead, ...
     'edgecolor','none')
-scatter( ...
-    [lead1 lead2], ymat, ...
-    marker_sz, 'k', 'o');
 errorbar(...
-    xlead, x, neglead, poslead,...
+    y,x,err,...
     'o', ...
     'horizontal', ...
     'marker','none', ...    
     'color',cerr, ...
     'linewidth',lw)
-
 
 % plot the trailing mislocalizations
-x = [1, 2]-.25;
-ymat = repmat(x, nsub, 1);
-barh(x,xtrail, barw, ...
+y = [nanmean(trail1), nanmean(trail2)];
+err = [SE(trail1), SE(trail2)];
+barh(x,y, ...
     'facecolor',ctrail, ...
     'edgecolor','none')
-scatter( ...
-    [trail1 trail2], ymat, ...
-    marker_sz, 'k', 'o');
 errorbar(...
-    xtrail, x, negtrail, postrail,...
+    y,x,err,...
     'o', ...
     'horizontal', ...
     'marker','none', ...    
     'color',cerr, ...
     'linewidth',lw)
 
-
-xlabel({'Perceived offset (dva)', '(in direction of motion)'})
+xlabel({'Perceived offset (dva)', 'in direction of motion'})
 xticks(xtick_vec)
 xlim([xtick_vec(1)-.5 xtick_vec(end)+.5])
 
 yticks(ytick_vec)
-yticklabels({'One-probe', 'Two-probe'})
-ylim([ytick_vec(1)-.8 ytick_vec(end)+.6])
+yticklabels({'Single', 'Double'})
+ylim([ytick_vec(1)-.8 ytick_vec(end)+.5])
 
-text(-.5,.3,'Trailing probe','color',ctrail,'horizontalalignment','right')
-text(.5,.3,'Leading probe','color',clead,'horizontalalignment','left')
+text(-2,.3,'Trailing probe','color',ctrail)
+text(.5,.3,'Leading probe','color',clead)
+text(-2.2, 2.3, 'N = 5')
 
 cleanplot
 
-saveas(gcf, '../results/fig02B.pdf')
+%%% stat fig02-B
+display(['single-trail: ', num2str(signrank(trail1))])
+display(['double-trail: ', num2str(signrank(trail2))])
+display(['single-lead: ',  num2str(signrank(lead1))])
+display(['double-lead: ',  num2str(signrank(lead2))])
 
-%%% ---------------------------------
-%%% stat fig 3
-
-%%% all vs baseline
-% 
-% disp([ ...
-%     'One-probe trail: ', ...
-%     'diff = ', num2str(mean(trail1)),' dva, ', ...
-%     'p = ', num2str(ptrail1) ...
-%     ])
-% 
-% disp([ ...
-%     'One-probe lead: ', ...
-%     'diff = ', num2str(mean(lead1)),' dva, ', ...
-%     'p = ', num2str(plead1) ...
-%     ])
-% 
-% disp([ ...
-%     'Two-probe trail: '...
-%     'diff = ', num2str(mean(trail2)),' dva, ', ...
-%     'p = ', num2str(ptrail2) ...
-%     ])
-% 
-% disp([ ...
-%     'Two-probe lead: ', ...
-%     'diff = ', num2str(mean(lead2)),' dva, ', ...
-%     'p = ', num2str(plead2) ...
-%     ])
-% 
-% disp('---')
-% 
-% %%% trail1 vs trail2
-% 
-% disp([ ...    
-%     'One-probe vs Two-probe trails: ', ...
-%     'diff = ', num2str(mean(trail2-trail1)), ' dva, ', ...
-%     'p = ', num2str(pdiff_trail) ...
-%     ])
-% 
-% 
-% %%% lead1 vs lead2
-% 
-% disp([ ...
-%     'One-probe vs Two-probe leads: ', ...
-%     'diff = ', num2str(mean(lead2-lead1)), ' dva; ', ...
-%     'p = ', num2str(pdiff_lead) ...
-%     ])
+display(['single vs double trail: ', num2str(signrank(trail1,trail2))])
+display(['single vs double lead: ', num2str(signrank(lead1,lead2))])
