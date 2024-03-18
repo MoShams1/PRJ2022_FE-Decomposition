@@ -60,14 +60,14 @@ subplot(2,2,2)
 color = 'k';
 lw = 1.5;  % line width
 xtick_vec = -10:5:10;
-ytick_vec = 0:3;
+ytick_vec = 0:1.5;
 
 err = SE(y_all);
 y = mean(y_all);
 
 errorbar(...
     x,y,err,...
-    'o', ...
+    '-o', ...
     'markerfacecolor',color, ...
     'markeredgecolor','none', ...
     'color',color, ...
@@ -94,7 +94,7 @@ hold on
 color = gray(4);
 lw = 1.5;
 xtick_vec = -10:5:10;
-ytick_vec = 0:3;
+ytick_vec = 0:1.5;
 
 for isz = 1:3
     err = SE(y_sz(:,:,isz));
@@ -102,7 +102,7 @@ for isz = 1:3
 
     errorbar(...
         x,y,err,...
-        'o', ...
+        '-o', ...
         'markerfacecolor',color(isz,:), ...
         'markeredgecolor','none', ...
         'color',color(isz,:), ...
@@ -162,49 +162,49 @@ x = (-9:2:9)';
 x_precise = (-9:.1:9)';
 
 %%% for all sizes poold
-subplot(2,2,2)
-hold on
-
-y = mean(y_all)';
-[y_mod, gof] = fit(x, y, fittype('gauss1'));
-r2_all = gof.adjrsquare;
-fit_amp_all = y_mod.a1;
-fit_mean_all = y_mod.b1;
-fit_std_all = y_mod.c1;
-
-fprintf( ...
-    'Fig03B fit (r2=%4.2f): amp = %3.1f dva, dist = %3.1f dva, std = %3.1f\n', ...
-    r2_all, fit_amp_all, fit_mean_all, fit_std_all)
-
-y_precise = feval(y_mod, x_precise);
-plot(x_precise, y_precise, ...
-    'color','k', ...
-    'linewidth',lw)
+% subplot(2,2,2)
+% hold on
+% 
+% y = mean(y_all)';
+% [y_mod, gof] = fit(x, y, fittype('gauss1'));
+% r2_all = gof.adjrsquare;
+% fit_amp_all = y_mod.a1;
+% fit_mean_all = y_mod.b1;
+% fit_std_all = y_mod.c1;
+% 
+% fprintf( ...
+%     'Fig03B fit (r2=%4.2f): amp = %3.1f dva, dist = %3.1f dva, std = %3.1f\n', ...
+%     r2_all, fit_amp_all, fit_mean_all, fit_std_all)
+% 
+% y_precise = feval(y_mod, x_precise);
+% plot(x_precise, y_precise, ...
+%     'color','k', ...
+%     'linewidth',lw)
 
 %%% for each size separately
-subplot(2,2,3)
-hold on
-
-log_legend = {'width 7.5', 'width 5', 'width 0.5'};
-
-for iframe_sz = 1:3
-    y = nanmean(y_sz(:,:,iframe_sz))';
-    [y_mod, gof] = fit(x, y, fittype('gauss1'));
-    r2(iframe_sz) = gof.adjrsquare;
-    fit_amp(iframe_sz) = y_mod.a1;
-    fit_mean(iframe_sz) = y_mod.b1;
-    fit_std(iframe_sz) = y_mod.c1;
-    
-    fprintf( ...
-    'Fig03C fit %s (r2=%4.2f): amp = %3.1f dva, dist = %3.1f dva, std = %3.1f\n', ...
-    log_legend{iframe_sz}, r2(iframe_sz), ...
-    fit_amp(iframe_sz), fit_mean(iframe_sz), fit_std(iframe_sz))
-
-    y_precise(:,iframe_sz) = feval(y_mod, x_precise);
-    plot(x_precise, y_precise(:,iframe_sz), ...
-        'color',color(iframe_sz,:), ...
-        'linewidth',lw)
-end
+% subplot(2,2,3)
+% hold on
+% 
+% log_legend = {'width 7.5', 'width 5', 'width 0.5'};
+% 
+% for iframe_sz = 1:3
+%     y = nanmean(y_sz(:,:,iframe_sz))';
+%     [y_mod, gof] = fit(x, y, fittype('gauss1'));
+%     r2(iframe_sz) = gof.adjrsquare;
+%     fit_amp(iframe_sz) = y_mod.a1;
+%     fit_mean(iframe_sz) = y_mod.b1;
+%     fit_std(iframe_sz) = y_mod.c1;
+%     
+%     fprintf( ...
+%     'Fig03C fit %s (r2=%4.2f): amp = %3.1f dva, dist = %3.1f dva, std = %3.1f\n', ...
+%     log_legend{iframe_sz}, r2(iframe_sz), ...
+%     fit_amp(iframe_sz), fit_mean(iframe_sz), fit_std(iframe_sz))
+% 
+%     y_precise(:,iframe_sz) = feval(y_mod, x_precise);
+%     plot(x_precise, y_precise(:,iframe_sz), ...
+%         'color',color(iframe_sz,:), ...
+%         'linewidth',lw)
+% end
 
 
 %%% Figure 03-D

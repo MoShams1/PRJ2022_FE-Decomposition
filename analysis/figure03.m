@@ -1,6 +1,6 @@
 clc
 clear
-% close all
+close all
 
 % Specify the path to the JSON filesß
 

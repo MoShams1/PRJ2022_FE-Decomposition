@@ -7,6 +7,7 @@ close all
 file_dir = dir('../data/*Exp01*');
 nsub = numel(file_dir);
 
+
 for isub = 1:nsub
 
     % Specify the path to the JSON file
@@ -62,7 +63,7 @@ csingle = 'k';
 cdouble = cmap(7,:);
 lw = 1.5;
 xtick_vec = 1:3;
-ytick_vec = 0:4;
+ytick_vec = 0:1.5;
 marker_sz = 50;
 marker_a = .2;
 alpha = .2;
@@ -98,12 +99,12 @@ xlim([xtick_vec(1)-.5 xtick_vec(end)+.5])
 
 ylabel 'Perceived offset (dva)'
 yticks(ytick_vec)
-ylim([ytick_vec(1)-.5 ytick_vec(end)+1])
+ylim([ytick_vec(1)-.5 ytick_vec(end)+.5])
 
 yline(0, 'linestyle','--')
 
-text(1, 4.3, 'One-probe', 'color', csingle, 'horizontalalignment','center')
-text(1, 4, 'Two-probe', 'color', cdouble, 'horizontalalignment','center')
+text(1, 1.4, 'One-probe', 'color', csingle, 'horizontalalignment','center')
+text(1, 1.3, 'Two-probe', 'color', cdouble, 'horizontalalignment','center')
 text(3, -.25, ['N = ', num2str(nsub)])
 
 cleanplot
