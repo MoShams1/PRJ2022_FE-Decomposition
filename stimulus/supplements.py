@@ -17,7 +17,7 @@ def config_mon_dell():
 def config_win(mon, fullscr):
     win = visual.Window(monitor=mon,
                         units='deg',
-                        size=[2240, 1260],
+                        size=[1920, 1000],
                         pos=[0, 0],
                         fullscr=fullscr,
                         color=[-.8, -.8, -.8])

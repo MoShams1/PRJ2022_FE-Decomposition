@@ -10,7 +10,7 @@ Mohammad Shams
 m.shams.ahmar@gmail.com
 2022-Jul-09
 """
-from psychopy import event, core
+from psychopy import event
 import supplements as sup
 import pandas as pd
 import numpy as np
@@ -24,7 +24,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 # -------------------------------------------------
 # insert session meta data
 # -------------------------------------------------
-person = 'AR'
+person = 'MS'
 n_trials = 60
 # -------------------------------------------------
 # destination file
@@ -186,6 +186,7 @@ for itrial in range(n_trials):
             pass
         click_loc[iclick, :] = mouse.getPos() / mccc
 
+    print(click_loc)
     # prepare condition label for saving
     cnd_label = sup.label_cnd(cnd)
     # -------------------------------------------------
