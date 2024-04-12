@@ -68,9 +68,11 @@ for isub = 1:nsub
 end
 
 %%% =====================================================================================
-%%%%% Figure 03
-figure('units','inches','outerposition',[7, 4, 6, 4])
+%%%%% Figure 3A
+figure('units','inches','outerposition',[7, 4, 8, 5])
 
+subplot(1,3,[1 2])
+pbaspect([1.5 1 1])
 set(gca,'ydir','reverse')
 hold on
 
@@ -84,11 +86,11 @@ xtick_vec = -5:6;
 ytick_vec = [1.5, 5.5];
 
 cmap = [ctrail;clead;ctrail;clead];
-scatterbar({trail1, lead1, trail2, lead2},cmap)
+scatterbarh({trail1, lead1, trail2, lead2},cmap)
 
 xline(0, 'linestyle','--')
 
-xlabel({'Click offset (dva)', '(in direction of motion)'})
+xlabel({'Position shift (dva)', '(in direction of motion)'})
 xticks(-4:5)
 xlim([xtick_vec(1) xtick_vec(end)])
 
@@ -117,7 +119,7 @@ fill_obj.EdgeColor = 'none';
 cleanplot
 
 %%% ---------------------------------
-%%% stat fig 3
+%%% stat fig 3A
 
 %%% all vs baseline
 [med, p, W, z, r] = signrank_full(trail1);
@@ -157,17 +159,57 @@ med,W,z,p,r)
 line([5.7 5.7], [2 5], 'color', 'k', 'linewidth', 2)
 text(6, 3.5, '*', 'fontsize', 18, 'color', 'k', 'horizontalalignment','center')
 
-saveas(gcf, '../results/fig03.pdf')
+%%% =====================================================================================
+%%%%% Figure 3B
+subplot(1,3,3)
+hold on
+
+one_probe_dist = abs(lead1-trail1);
+two_probe_dist = abs(lead2-trail2);
+
+cmap = [0 0 0; c(5,:) .* .85];
+xs = scatterbar({one_probe_dist, two_probe_dist},50,cmap);
+plot(xs', [one_probe_dist, two_probe_dist]','color',[.5 .5 .5])
+
+yline(0, 'linestyle','--')
+yline(6, 'linestyle','--')
+
+xticks([1 2])
+xticklabels({'One-probe', 'Two-probe'})
+xlim([.5 2.5])
+
+ylabel({'Distance between two clicks (dva)'})
+yticks(-4:6)
+ylim([-.5 6.2])
+
+cleanplot
+
+%%% stats
+[med, p, W, z, r] = signrank_full(two_probe_dist,one_probe_dist);
+fprintf('\n<One-probe vs Two-probe> md = %4.1f dva, W = %5d, z = %5.2f, p = %5.3f, r = %4.2f \n', ...
+med,W,z,p,r)
+
+fprintf('<One-probe> md = %4.1f dva\n', median(one_probe_dist))
+fprintf('<Two-probe> md = %4.1f dva\n', median(two_probe_dist))
+fprintf('<Two-probe/Travel distance> %4.1f %%\n', median(two_probe_dist)/6*100)
+fprintf('<Two-probe increase> %4.1f %%\n', ...
+    median((two_probe_dist-one_probe_dist)./one_probe_dist*100))
+
+line([1 2], [6.2 6.2], 'color', 'k', 'linewidth', 2)
+text(1.5, 6.3, '***', 'fontsize', 18, 'color', 'k', 'horizontalalignment','center')
+text(.55, 5.8, 'Travel path length')
+%%% =====================================================================================
+saveas(gcf, '../results/fig03AB.pdf')
 
 
-function scatterbar(A,c)
+function scatterbarh(A,c)
 % A: a cell of cetegories
 
 ncat    = numel(A); % number of categories
 stdx    = .05; % standard deviation of scatters in each category
-linelm  = .4; % line length for median
+linelm  = .6; % line length for median
 marksz = 50;
-alpha = .7;
+alpha = .5;
 
 hold on
 for icat = 1:ncat    
@@ -185,7 +227,32 @@ for icat = 1:ncat
         marksz, c(icat,:), 'o', 'filled', 'markerfacealpha', alpha);
     line([nanmedian(A{icat}) nanmedian(A{icat})],...
         [offset-linelm offset+linelm], ...
-        'color',c(icat,:),'linewidth',1);
+        'color',c(icat,:),'linewidth',3);
+end
 end
 
+function xs = scatterbar(A,marksz,c)
+% A: a cell of cetegories
+
+ncat    = numel(A); % number of categories
+stdx    = .05; % standard deviation of scatters in each category
+linelm  = .4; % line length for median
+lw = 3;
+alpha = .4;
+
+hold on
+for icat = 1:ncat    
+    rng default
+    n = numel(A{icat});
+    x = randn(n,1)*stdx + icat;
+    xs(:,icat) = x;
+    
+    scatter(x,A{icat}, ...
+        marksz, c(icat,:), 'o', 'filled', 'markerfacealpha', alpha);
+    line([icat-linelm icat+linelm],[nanmedian(A{icat}) nanmedian(A{icat})],...
+        'color',c(icat,:),'linewidth',lw);
+end
+
+xlim([0 ncat+1])
+set(gca,'xtick',1:ncat)
 end

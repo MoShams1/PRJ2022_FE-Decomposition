@@ -99,7 +99,7 @@ xlabel 'Number of motion cycles'
 xticks(xtick_vec)
 xlim([xtick_vec(1)-.5 xtick_vec(end)+.5])
 
-ylabel 'Click offset (dva)'
+ylabel 'Position shift (dva)'
 yticks(ytick_vec)
 ylim([ytick_vec(1)-.5 ytick_vec(end)])
 
@@ -164,7 +164,6 @@ y = {one_probe_err_pooled, two_probe_err_pooled};
 
 xs = scatterbar(y, 50, [csingle; cdouble]);
 plot(xs', [one_probe_err_pooled, two_probe_err_pooled]','color',[.5 .5 .5])
-scatterbar(y, 50, [csingle; cdouble]);
 
 yline(0, 'linestyle','--')
 
@@ -172,7 +171,7 @@ xticks([1 2])
 xticklabels({'One-probe', 'Two-probe'})
 xlim([.5 2.5])
 
-ylabel 'Click offset (dva)'
+ylabel 'Position shift (dva)'
 yticks(ytick_vec)
 ylim([ytick_vec(1)-.5 ytick_vec(end)])
 
@@ -207,8 +206,10 @@ function xs = scatterbar(A,marksz,c)
 % A: a cell of cetegories
 
 ncat    = numel(A); % number of categories
-stdx    = .07; % standard deviation of scatters in each category
+stdx    = .05; % standard deviation of scatters in each category
 linelm  = .4; % line length for median
+lw = 3;
+alpha = .4;
 
 hold on
 for icat = 1:ncat    
@@ -218,9 +219,9 @@ for icat = 1:ncat
     xs(:,icat) = x;
     
     scatter(x,A{icat}, ...
-        marksz, c(icat,:), 'o', 'filled', 'markerfacealpha', .4);
+        marksz, c(icat,:), 'o', 'filled', 'markerfacealpha', alpha);
     line([icat-linelm icat+linelm],[nanmedian(A{icat}) nanmedian(A{icat})],...
-        'color',c(icat,:),'linewidth',1);
+        'color',c(icat,:),'linewidth',lw);
 end
 
 xlim([0 ncat+1])
