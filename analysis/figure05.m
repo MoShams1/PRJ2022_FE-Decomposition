@@ -88,7 +88,7 @@ xlabel 'Probe to frame''s center (dva)'
 xticks(xtick_vec)
 xlim([xtick_vec(1)-.5 xtick_vec(end)])
 
-ylabel({'Click offset (dva)', '(in direction of motion)'})
+ylabel({'Position shift (dva)', '(in direction of motion)'})
 yticks(ytick_vec)
 ylim([ytick_vec(1)-.4 ytick_vec(end)+.2])
 
