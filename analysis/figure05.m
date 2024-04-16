@@ -50,7 +50,7 @@ end
 
 
 %%%%% Figure 03
-figure('units','inches','outerposition',[7, 4, 4, 4.7])
+figure('units','inches','outerposition',[7, 4, 4, 5])
 
 color_ref = copper(4);
 color(1,:) = color_ref(1,:);

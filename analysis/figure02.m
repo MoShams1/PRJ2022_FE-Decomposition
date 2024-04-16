@@ -56,7 +56,8 @@ end
 %%% =====================================================================================
 %%%%% Figure 2B
 
-figure('units','inches','outerposition',[7, 4, 5, 5])
+figure('units','inches','outerposition',[7, 4, 4.5, 4.5])
+
 subplot(1,2,1)
 hold on
 
@@ -105,8 +106,8 @@ ylim([ytick_vec(1)-.5 ytick_vec(end)])
 
 yline(0, 'linestyle','--')
 
-text(1, .5, 'One-probe', 'color', csingle, 'horizontalalignment','left')
-text(1, 0.25, 'Two-probe', 'color', cdouble, 'horizontalalignment','left')
+text(1, .7, 'One-probe', 'color', csingle, 'horizontalalignment','left')
+text(1, 0.4, 'Two-probe', 'color', cdouble, 'horizontalalignment','left')
 text(3, -.25, ['N = ', num2str(nsub)])
 
 cleanplot
@@ -194,10 +195,11 @@ line([1 2], [3.5 3.5], 'color', 'k', 'linewidth', 2)
 text(1.5, 3.6, '***', 'fontsize', 18, 'horizontalalignment','center')
 
 %%% =====================================================================================
+
 saveas(gcf, '../results/fig02BC.pdf')
 
 %%% =====================================================================================
-% scatterbar 1.0
+% scatterbar
 % Mohammad Shams <m.shamsahmar@gmail.com>
 % Created: Apr 1, 2019
 % Modified: Mar 20, 2024

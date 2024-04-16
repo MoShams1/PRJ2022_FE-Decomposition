@@ -69,10 +69,10 @@ end
 
 %%% =====================================================================================
 %%%%% Figure 3A
-figure('units','inches','outerposition',[7, 4, 8, 5])
+figure('units','inches','outerposition',[7, 4, 6, 4.5])
 
 subplot(1,3,[1 2])
-pbaspect([1.5 1 1])
+pbaspect([1.8 1 1])
 set(gca,'ydir','reverse')
 hold on
 
