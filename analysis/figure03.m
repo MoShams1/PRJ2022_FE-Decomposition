@@ -101,8 +101,8 @@ ylim([0 6])
 text(-4.8, 1.5, 'One-probe', 'color', cfill1, 'horizontalalignment','right')
 text(-4.8, 4.5, 'Two-probe', 'color', cfill2, 'horizontalalignment','right')
 
-text(-.25,-.35,'Trailing probe','color',ctrail,'horizontalalignment','right')
-text(.25,-.35,'Leading probe','color',clead,'horizontalalignment','left')
+text(-.25,-.35,'Terminating probe','color',ctrail,'horizontalalignment','right')
+text(.25,-.35,'Initiating probe','color',clead,'horizontalalignment','left')
 
 offset = .15;
 
