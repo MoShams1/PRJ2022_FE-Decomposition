@@ -1,3 +1,8 @@
+
+%%%%%%%%%%%%%%%%
+% Experiment 3 %
+%%%%%%%%%%%%%%%%
+
 clc
 clear
 close all
@@ -172,18 +177,6 @@ xlabel 'Probe to frame''s center (ms)'
 set(gca,'ycolor','none')
 cleanplot
 
-% % plot the normalized induced position shift plot
-% figure
-% hold on
-% frame_sizes = [7.5 5 .5];
-% for iframe_sz = 1:3
-%     y = nanmean(y_sz(:,:,iframe_sz),1)';
-%     [y_mod, gof] = fit(x, y, ft, opts);
-%     y_precise(:,iframe_sz) = feval(y_mod, x_precise) ./ frame_sizes(iframe_sz) * 100;
-%     plot(x_precise, y_precise(:,iframe_sz), ...
-%         'color',color(iframe_sz,:), ...
-%         'linewidth',lw)
-% end
 
 saveas(gcf, '../results/fig05.pdf')
 
