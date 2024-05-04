@@ -13,7 +13,7 @@
 % ===== OUTPUT =====
 % sig: a logical vector indicating significant pvalues after correction
 
-function [sig, alpha_hat] = BH_correct(pval,alpha,side)
+function [sig, alpha_hat, pval_adjusted] = BH_correct(pval,alpha,side)
 
 n = nargin;
 
@@ -28,6 +28,10 @@ rank = 1:n;
 
 alpha_hat_sort = (alpha./n)*rank;
 alpha_hat(ind) = alpha_hat_sort;
+
+pval_adjusted_temp = pval.*n./rank;
+one_vec = ones(1,n);
+pval_adjusted = min([pval_adjusted_temp; one_vec]);
 
 switch side
     case 1

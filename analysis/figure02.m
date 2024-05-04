@@ -156,7 +156,7 @@ fprintf('<2 vs 1> md = %4.1f dva, W = %5d, z = %5.2f, p = %5.3f, r = %4.2f \n\n'
 med,W,z,p,r)
 p_list(3) = p;
 
-[sig, alpha_hat] = BH_correct(p_list, .001, 2);
+[sig, alpha_hat, p_adjusted] = BH_correct(p_list, .05, 2);
 
 line([1 2], [3.25 3.25], 'color', cdouble, 'linewidth', 2)
 text(1.5, 3.45, '\it n.s.', 'color', cdouble, 'horizontalalignment','center')
