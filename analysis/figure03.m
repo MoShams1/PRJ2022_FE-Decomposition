@@ -194,16 +194,19 @@ cleanplot
 fprintf('\n<One-probe vs Two-probe> md = %4.1f dva, W = %5d, z = %5.2f, p = %5.3f, r = %4.2f \n', ...
 med,W,z,p,r)
 
-fprintf('<One-probe> md = %4.1f dva\n', median(one_probe_dist))
-fprintf('<Two-probe> md = %4.1f dva\n', median(two_probe_dist))
-fprintf('<Two-probe/Travel distance> %4.1f %%\n', median(two_probe_dist)/6*100)
-fprintf('<Two-probe increase> %4.1f %%\n', ...
+fprintf('<median difference> %3.0f %%\n\n', ...
     median((two_probe_dist-one_probe_dist)./one_probe_dist*100))
+
+
+disp('=== offset report vs. mouse click ===')
+fprintf('median difference: %2.0f%% \n', median(two_probe_dist./6*100))
 
 line([1 2], [6.2 6.2], 'color', 'k', 'linewidth', 2)
 text(1.5, 6.3, '***', 'fontsize', 18, 'color', 'k', 'horizontalalignment','center')
 text(.55, 5.8, 'Travel path length')
 %%% =====================================================================================
+
+save fig3B.mat one_probe_dist two_probe_dist lead2 trail2
 saveas(gcf, '../results/fig03AB.pdf')
 
 

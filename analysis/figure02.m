@@ -202,13 +202,14 @@ med,W,z,p,r)
 
 perc = median((two_probe_err_pooled-one_probe_err_pooled) ./ two_probe_err_pooled * 100);
 
-fprintf('delta in percentage: %3d%% \n', round(perc))
+fprintf('median difference: %3d%% \n', round(perc))
 
 line([1 2], [3.5 3.5], 'color', 'k', 'linewidth', 2)
 text(1.5, 3.6, '***', 'fontsize', 18, 'horizontalalignment','center')
 
 %%% =====================================================================================
 
+save fig2C.mat one_probe_err_pooled two_probe_err_pooled
 saveas(gcf, '../results/fig02BC.pdf')
 
 %%% =====================================================================================
