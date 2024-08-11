@@ -8,6 +8,12 @@ def config_mon_imac24():
     return monitor
 
 
+def config_mon_macbookair():
+    monitor = monitors.Monitor('prim_mon', width=33, distance=57)
+    monitor.setSizePix([1440, 900])
+    return monitor
+
+
 def config_mon_dell():
     monitor = monitors.Monitor('prim_mon', width=52, distance=70)
     monitor.setSizePix([1920, 1080])
